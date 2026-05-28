@@ -1,0 +1,14 @@
+# Delphi compiling temp and backup files
+*.dcu
+*.~*
+*.local
+*.identcache
+*.tvsconfig
+*.stat
+*.ddp
+
+# Compiled binaries
+*.exe
+*.dll
+*.bpl
+*.dcp
