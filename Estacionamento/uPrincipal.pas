@@ -189,49 +189,28 @@ end;
 
 function TfrEstacionamento.fCalcularValorTotalAPagar(wEntrada:Currency; wSaida:Currency): Currency;
 var
-   wTempoDoEstacionamento: Currency;
-   wHoraEntrada: String;
-   wHoraSaida: String;
-   wMinutoEntrada,
-   wminutoSaida: String;
+  wMinutosEntrada: Integer;
+  wMinutosSaida: Integer;
+  wDiferencaMinutos: Integer;
+  wHoras: Integer;
+  wMinutos: Integer;
+  wTempoDoEstacionamento: Currency;
 begin
-  {1. Desmembrar e converter os dois tempos para Minutos Totais
-Faça isso tanto para o tempo inicial quanto para o final:
+  // 1. Desmembrar e converter os dois tempos para Minutos Totais
+  wMinutosEntrada := (Trunc(wEntrada) * 60) + Round(Frac(wEntrada) * 100);
+  wMinutosSaida := (Trunc(wSaida) * 60) + Round(Frac(wSaida) * 100);
 
+  // 2. Encontrar a diferenca exata
+  wDiferencaMinutos := wMinutosSaida - wMinutosEntrada;
+  if wDiferencaMinutos < 0 then
+    wDiferencaMinutos := wDiferencaMinutos + (24 * 60);
 
+  // 3. Converter de volta para a sua simulacao (com virgula)
+  wHoras := wDiferencaMinutos div 60;
+  wMinutos := wDiferencaMinutos mod 60;
+  wTempoDoEstacionamento := wHoras + (wMinutos / 100);
 
-Pegue apenas o número antes da vírgula (as horas) e multiplique por 60.
-
-Pegue o número depois da vírgula (os minutos) e o considere como um número inteiro.
-
-Some os dois resultados. Agora você tem o valor exato de minutos de cada variável.
-(Exemplo do 9,50: 9 x 60 = 540. Somado aos 50 da casa decimal = 590 minutos totais).
-
-
-2. Encontrar a diferença exata
-
-
-
-Subtraia os Minutos Totais do tempo inicial dos Minutos Totais do tempo final. O resultado será o tempo exato que se passou, puramente em minutos.
-
-
-3. Converter de volta para a sua simulação (com vírgula)
-Pegue a diferença em minutos que você acabou de calcular e separe novamente:
-
-
-
-Para descobrir as horas: Divida a diferença por 60 e pegue apenas o resultado inteiro. Esse número fica antes da vírgula.
-
-Para descobrir os minutos: Pegue apenas o resto (a sobra) dessa mesma divisão por 60. Esse número fica depois da vírgula.
-}
-  wHoraEntrada := Copy(CurrToStr(wEntrada), 1, ( Pos(',',CurrToStr(wEntrada) ) -1 )); //pega a hora
-  wHoraSaida := Copy(CurrToStr(wSaida), 1, ( Pos(',',CurrToStr(wSaida) ) -1 ));
-  wMinutoEntrada := Copy(CurrToStr(wSaida), (Pos(',',CurrToStr(wSaida) ) -1 ), Lenght(CurrToStr(wSaida.)) );
-
-
-
-  ShowMessage(wMinutoEntrada);
-  wTempoDoEstacionamento := cdsClientesbdHrSaida.AsCurrency - cdsClientesbdHrEntrada.AsCurrency;
+  // 4. Calcular valor total a pagar
   Result := StrToCurr(edValor.Text) * wTempoDoEstacionamento;
 end;
 
