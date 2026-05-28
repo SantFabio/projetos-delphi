@@ -1,8 +1,8 @@
 object frEstacionamento: TfrEstacionamento
-  Left = 756
-  Top = 107
+  Left = 1379
+  Top = 141
   Width = 531
-  Height = 493
+  Height = 483
   Caption = 'Estacionamento'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,50 +18,64 @@ object frEstacionamento: TfrEstacionamento
     Left = 64
     Top = 24
     Width = 36
-    Height = 13
+    Height = 21
+    AutoSize = False
     Caption = 'C'#243'digo:'
+    Layout = tlCenter
   end
   object lbPlaca: TLabel
-    Left = 240
+    Left = 256
     Top = 24
     Width = 30
-    Height = 13
+    Height = 21
+    AutoSize = False
     Caption = 'Placa:'
+    Layout = tlCenter
   end
   object lbMarca: TLabel
-    Left = 64
-    Top = 56
+    Left = 67
+    Top = 64
     Width = 33
-    Height = 13
+    Height = 21
+    AutoSize = False
     Caption = 'Marca:'
+    Layout = tlCenter
   end
   object lbHoraEntrada: TLabel
-    Left = 56
-    Top = 128
+    Left = 34
+    Top = 112
     Width = 66
-    Height = 13
+    Height = 21
+    AutoSize = False
     Caption = 'Hora Entrada:'
+    Layout = tlCenter
   end
   object lbHrSaida: TLabel
     Left = 256
-    Top = 120
+    Top = 112
     Width = 32
-    Height = 13
+    Height = 21
+    AutoSize = False
     Caption = 'Sa'#237'da:'
+    Layout = tlCenter
   end
   object lbTipoPagamento: TLabel
-    Left = 64
-    Top = 160
+    Left = 19
+    Top = 152
     Width = 81
-    Height = 13
+    Height = 21
+    AutoSize = False
     Caption = 'Tipo Pagamento:'
+    Layout = tlCenter
   end
   object lbValor: TLabel
-    Left = 88
-    Top = 200
+    Left = 73
+    Top = 184
     Width = 27
-    Height = 13
+    Height = 21
+    AutoSize = False
     Caption = 'Valor:'
+    Layout = tlCenter
   end
   object edCod: TEdit
     Left = 112
@@ -72,23 +86,23 @@ object frEstacionamento: TfrEstacionamento
     OnChange = edCodChange
   end
   object edPlaca: TEdit
-    Left = 280
+    Left = 296
     Top = 24
     Width = 121
     Height = 21
     TabOrder = 1
   end
   object edMarca: TEdit
-    Left = 104
-    Top = 56
+    Left = 112
+    Top = 64
     Width = 121
     Height = 21
     TabOrder = 2
   end
   object rgTipoCliente: TRadioGroup
-    Left = 240
-    Top = 48
-    Width = 185
+    Left = 296
+    Top = 54
+    Width = 161
     Height = 41
     Caption = 'Tipo'
     Columns = 2
@@ -100,15 +114,15 @@ object frEstacionamento: TfrEstacionamento
     OnExit = rgTipoClienteExit
   end
   object edHrEntrada: TEdit
-    Left = 128
-    Top = 120
+    Left = 112
+    Top = 112
     Width = 121
     Height = 21
     TabOrder = 4
   end
   object edHrSaida: TEdit
-    Left = 304
-    Top = 120
+    Left = 296
+    Top = 112
     Width = 121
     Height = 21
     Color = cl3DLight
@@ -116,9 +130,9 @@ object frEstacionamento: TfrEstacionamento
     TabOrder = 5
   end
   object cbTipoPagamento: TComboBox
-    Left = 152
-    Top = 160
-    Width = 145
+    Left = 112
+    Top = 152
+    Width = 121
     Height = 21
     ItemHeight = 13
     TabOrder = 6
@@ -128,8 +142,8 @@ object frEstacionamento: TfrEstacionamento
       'Pix')
   end
   object edValor: TEdit
-    Left = 128
-    Top = 200
+    Left = 112
+    Top = 184
     Width = 121
     Height = 21
     Color = cl3DLight
@@ -137,8 +151,8 @@ object frEstacionamento: TfrEstacionamento
     TabOrder = 7
   end
   object btSalvar: TButton
-    Left = 152
-    Top = 232
+    Left = 160
+    Top = 216
     Width = 75
     Height = 25
     Caption = 'Salvar'
@@ -146,24 +160,24 @@ object frEstacionamento: TfrEstacionamento
     OnClick = btSalvarClick
   end
   object btDemPagamento: TButton
-    Left = 312
-    Top = 192
+    Left = 296
+    Top = 152
     Width = 153
     Height = 25
     Caption = 'Demostra Pagamento'
     TabOrder = 9
   end
   object btDemTipoPagamento: TButton
-    Left = 312
-    Top = 224
+    Left = 296
+    Top = 184
     Width = 153
     Height = 25
     Caption = 'Demostrar Tipo Pagamento'
     TabOrder = 10
   end
   object btDemValorTotal: TButton
-    Left = 312
-    Top = 256
+    Left = 296
+    Top = 216
     Width = 153
     Height = 25
     Caption = 'Demostrar Valor Total'
@@ -171,9 +185,10 @@ object frEstacionamento: TfrEstacionamento
   end
   object grClientes: TDBGrid
     Left = 0
-    Top = 296
-    Width = 505
-    Height = 145
+    Top = 264
+    Width = 523
+    Height = 188
+    Align = alBottom
     DataSource = DataSource1
     TabOrder = 12
     TitleFont.Charset = DEFAULT_CHARSET
@@ -184,8 +199,8 @@ object frEstacionamento: TfrEstacionamento
   end
   object DataSource1: TDataSource
     DataSet = cdsClientes
-    Left = 40
-    Top = 232
+    Left = 120
+    Top = 216
   end
   object cdsClientes: TClientDataSet
     Active = True
@@ -236,8 +251,8 @@ object frEstacionamento: TfrEstacionamento
       end>
     Params = <>
     StoreDefs = True
-    Left = 8
-    Top = 232
+    Left = 88
+    Top = 216
     Data = {
       2F0100009619E0BD0100000018000000090000000000030000002F0105626443
       6F640400010000000000076264506C6163610100490000000100055749445448
@@ -250,32 +265,41 @@ object frEstacionamento: TfrEstacionamento
       004D6F6E6579000D626456616C6F724150616761720800040000000100075355
       42545950450200490006004D6F6E6579000000}
     object cdsClientesbdCod: TIntegerField
+      DisplayWidth = 7
       FieldName = 'bdCod'
     end
     object cdsClientesbdPlaca: TStringField
+      DisplayWidth = 9
       FieldName = 'bdPlaca'
       Size = 6
     end
     object cdsClientesbdMarca: TStringField
+      DisplayWidth = 12
       FieldName = 'bdMarca'
       Size = 10
     end
     object cdsClientesbdTipoCliente: TIntegerField
+      DisplayWidth = 13
       FieldName = 'bdTipoCliente'
     end
     object cdsClientesbdHrEntrada: TCurrencyField
+      DisplayWidth = 12
       FieldName = 'bdHrEntrada'
     end
     object cdsClientesbdHrSaida: TCurrencyField
+      DisplayWidth = 12
       FieldName = 'bdHrSaida'
     end
     object cdsClientesbdTipoPagamento: TIntegerField
+      DisplayWidth = 18
       FieldName = 'bdTipoPagamento'
     end
     object cdsClientesbdValorTotal: TCurrencyField
+      DisplayWidth = 12
       FieldName = 'bdValorTotal'
     end
     object cdsClientesbdValorAPagar: TCurrencyField
+      DisplayWidth = 14
       FieldName = 'bdValorAPagar'
     end
   end
