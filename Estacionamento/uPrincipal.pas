@@ -104,6 +104,7 @@ type
     btCadastarMarca: TButton;
     cdsMarcasbdCOD: TIntegerField;
     cdsMarcasbdNOMEMARCA: TStringField;
+    btFecharPanel: TButton;
     procedure btSalvarClick(Sender: TObject);
     procedure edCodChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -114,6 +115,8 @@ type
     procedure btCadastarMarcaClick(Sender: TObject);
     procedure edCodMarcaChange(Sender: TObject);
     procedure edMarcaChange(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure btFecharPanelClick(Sender: TObject);
   private
     wValorDiaria: Currency;
     wValorMensal: Currency;
@@ -135,8 +138,9 @@ implementation
 
 procedure TfrEstacionamento.btSalvarClick(Sender: TObject);
 begin
+  if not fVerificarCampos then Exit;
   cdsClientes.IndexFieldNames := 'bdCod';
-  if cdsClientes.FindKey([edCod.Text]) then
+  if cdsClientes.FindKey([StrToInt(edCod.Text)]) then
     begin
       cdsClientes.Edit;
         cdsClientesbdPlaca.AsString := edPlaca.Text;
@@ -184,22 +188,22 @@ begin
     end
    else if (edMarca.Text = '') then
     begin
-      ShowMessage('É necessário preencher o campo "Placa"!');
+      ShowMessage('É necessário preencher o campo "Marca"!');
       edMarca.SetFocus;
       Result := False;
       Exit;
     end
    else if (edHrEntrada.Text = '') then
     begin
-      ShowMessage('É necessário preencher o campo "Placa"!');
+      ShowMessage('É necessário preencher o campo "Hora Entrada"!');
       edHrEntrada.SetFocus;
       Result := False;
       Exit;
     end
    else if (cbTipoPagamento.ItemIndex = -1) then
     begin
-      ShowMessage('É necessário preencher o campo "Placa"!');
-      edPlaca.SetFocus;
+      ShowMessage('É necessário selecionar o "Tipo Pagamento"!');
+      cbTipoPagamento.SetFocus;
       Result := False;
       Exit;
     end;
@@ -208,7 +212,7 @@ end;
 procedure TfrEstacionamento.edCodChange(Sender: TObject);
 begin
   cdsClientes.IndexFieldNames := 'bdCod';
-  if cdsClientes.FindKey([edCod.Text]) then
+  if (edCod.Text <> '') and cdsClientes.FindKey([StrToIntDef(edCod.Text, 0)]) then
     begin
         edPlaca.Text := cdsClientesbdPlaca.AsString;
         edMarca.Text := cdsClientesbdMarca.AsString;
@@ -224,6 +228,16 @@ begin
         cbTipoPagamento.Enabled := False;
         edHrSaida.Enabled := True;
         edHrSaida.Color := clWhite;
+    end
+  else
+    begin
+        edPlaca.Enabled := True;
+        edMarca.Enabled := True;
+        rgTipoCliente.Enabled := True;
+        edHrEntrada.Enabled := True;
+        cbTipoPagamento.Enabled := True;
+        edHrSaida.Enabled := True;
+        edHrSaida.Color := cl3DLight;
     end;
 end;
 
@@ -251,6 +265,14 @@ begin
   cbTipoPagamento.ItemIndex := -1;
   edValor.Text := '5';
   edHrSaida.Clear;
+
+  edPlaca.Enabled := True;
+  edMarca.Enabled := True;
+  rgTipoCliente.Enabled := True;
+  edHrEntrada.Enabled := True;
+  cbTipoPagamento.Enabled := True;
+  edHrSaida.Enabled := False;
+  edHrSaida.Color := cl3DLight;
 end;
 
 function TfrEstacionamento.fCalcularValorTotalAPagar(wEntrada:Currency; wSaida:Currency): Currency;
@@ -295,7 +317,7 @@ var
   wValorApagarPTipo: Currency;
 begin
   cdsClientes.IndexFieldNames := 'bdCod';
-  if cdsClientes.FindKey([edCod.Text]) and (edHrSaida.Text <> '') then //Se o cliente e o valor hora saida está preenchido
+  if (edCod.Text <> '') and cdsClientes.FindKey([StrToIntDef(edCod.Text, 0)]) and (edHrSaida.Text <> '') then //Se o cliente e o valor hora saida está preenchido
     begin
       rgTipoCliente.Enabled := True;
       for wCount := 0 to rgTipoCliente.Items.Count - 1 do
@@ -325,10 +347,20 @@ begin
 end;
 
 procedure TfrEstacionamento.edHrSaidaChange(Sender: TObject);
-
+var
+  wEntrada, wSaida: Currency;
 begin
-    edValor.Text := CurrToStr(fCalcularValorTotalAPagar(StrToCurr(edHrEntrada.Text), StrToCurr(edHrSaida.Text)));
-
+  if TryStrToCurr(edHrEntrada.Text, wEntrada) and TryStrToCurr(edHrSaida.Text, wSaida) then
+    begin
+      edValor.Text := CurrToStr(fCalcularValorTotalAPagar(wEntrada, wSaida));
+    end
+  else
+    begin
+      if rgTipoCliente.ItemIndex = 0 then
+        edValor.Text := CurrToStr(wValorDiaria)
+      else
+        edValor.Text := CurrToStr(wValorMensal);
+    end;
 end;
 
 procedure TfrEstacionamento.btCadastrarMarcaClick(Sender: TObject);
@@ -338,8 +370,9 @@ end;
 
 procedure TfrEstacionamento.btCadastarMarcaClick(Sender: TObject);
 begin
+      if not fVerificarCamposPanel then Exit;
       cdsMarcas.IndexFieldNames := 'bdCOD';
-      if cdsMarcas.FindKey([edCodMarca.Text]) then
+      if cdsMarcas.FindKey([StrToInt(edCodMarca.Text)]) then
           begin
             cdsMarcas.Edit;
               cdsMarcasbdNOMEMARCA.AsString := edNomeMarca.Text;
@@ -354,6 +387,7 @@ begin
           end;
           edCodMarca.Text := '';
           edNomeMarca.Text := '';
+          plCadastrarMarcas.Left := 552;
 end;
 
 function TfrEstacionamento.fVerificarCamposPanel: Boolean;
@@ -377,21 +411,47 @@ end;
 
 procedure TfrEstacionamento.edCodMarcaChange(Sender: TObject);
 begin
-    cdsMarcas.IndexFieldNames := 'bdCOD';
-    if cdsMarcas.FindKey([edCodMarca.Text]) then
-      begin
-        edCodMarca.Text := IntToStr(cdsMarcasbdCOD.AsInteger);
-        edNomeMarca.Text := cdsMarcasbdNOMEMARCA.AsString;
-      end;
+  if edCodMarca.Text <> '' then
+    begin
+      cdsMarcas.IndexFieldNames := 'bdCOD';
+      if cdsMarcas.FindKey([StrToIntDef(edCodMarca.Text, 0)]) then
+        begin
+          edNomeMarca.Text := cdsMarcasbdNOMEMARCA.AsString;
+        end;
+    end;
 end;
 
 procedure TfrEstacionamento.edMarcaChange(Sender: TObject);
+var
+  wCodMarca: Integer;
 begin
-  cdsMarcas.IndexFieldNames := 'bdCod';
-  if cdsMarcas.FindKey([edCodMarca.Text]) then
+  if TryStrToInt(edMarca.Text, wCodMarca) then
+    begin
+      cdsMarcas.IndexFieldNames := 'bdCOD';
+      if cdsMarcas.FindKey([wCodMarca]) then
+        begin
+          edMarca.OnChange := nil;
+          try
+            edMarca.Text := cdsMarcasbdNOMEMARCA.AsString;
+          finally
+            edMarca.OnChange := edMarcaChange;
+          end;
+        end;
+    end;
+end;
+
+procedure TfrEstacionamento.DBGrid1DblClick(Sender: TObject);
+begin
+  if not cdsMarcas.IsEmpty then
     begin
       edMarca.Text := cdsMarcasbdNOMEMARCA.AsString;
+      plCadastrarMarcas.Left := 552;
     end;
+end;
+
+procedure TfrEstacionamento.btFecharPanelClick(Sender: TObject);
+begin
+  plCadastrarMarcas.Left := 552;
 end;
 
 end.

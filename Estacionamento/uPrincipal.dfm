@@ -237,6 +237,7 @@ object frEstacionamento: TfrEstacionamento
       TitleFont.Height = -11
       TitleFont.Name = 'MS Sans Serif'
       TitleFont.Style = []
+      OnDblClick = DBGrid1DblClick
       Columns = <
         item
           Expanded = False
@@ -266,6 +267,15 @@ object frEstacionamento: TfrEstacionamento
       Caption = 'Cadastar Marca'
       TabOrder = 3
       OnClick = btCadastarMarcaClick
+    end
+    object btFecharPanel: TButton
+      Left = 120
+      Top = 208
+      Width = 99
+      Height = 25
+      Caption = 'Fechar'
+      TabOrder = 4
+      OnClick = btFecharPanelClick
     end
   end
   object DataSource1: TDataSource

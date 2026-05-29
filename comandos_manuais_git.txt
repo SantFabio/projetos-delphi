@@ -1,0 +1,41 @@
+===================================================
+   COMANDOS MANUAIS PARA CONFIGURAÇÃO NO PC DA EMPRESA
+===================================================
+
+Caso o script automatizado dê algum erro, execute os passos abaixo manualmente
+no seu terminal (PowerShell, Prompt de Comando ou Git Bash):
+
+Passo 1: Configurar a sua identidade global no Git
+--------------------------------------------------
+Rode os comandos abaixo (um de cada vez):
+
+git config --global user.name "Luiz Fábio Pereira Santana"
+git config --global user.email "f4biosantana@gmail.com"
+git config --global credential.helper manager
+
+
+Passo 2: Navegar até a pasta do projeto clonado
+-----------------------------------------------
+Use o comando 'cd' seguido do caminho onde você clonou o projeto. Exemplo:
+
+cd C:\Borland\Delphi7\Projects
+
+
+Passo 3: Trazer as atualizações do GitHub (Sincronizar)
+-------------------------------------------------------
+Rode o comando abaixo para atualizar sua pasta local com o que foi enviado hoje:
+
+git pull origin main
+
+
+Passo 4: Como salvar e enviar novas alterações no dia a dia
+------------------------------------------------------------
+Sempre que fizer alterações nos projetos e quiser enviá-las para o GitHub:
+
+1. Salve e envie as alterações locais:
+   git add .
+   git commit -m "sua mensagem explicativa"
+   git push origin main
+
+   (Na primeira vez que rodar o 'git push', uma tela de login do GitHub
+   será aberta no navegador para você autorizar o acesso da máquina).
