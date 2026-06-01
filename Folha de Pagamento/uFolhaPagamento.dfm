@@ -1,6 +1,6 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 435
-  Top = 79
+  Left = 784
+  Top = 67
   Width = 717
   Height = 540
   Caption = 'Folha de Pagamento'
