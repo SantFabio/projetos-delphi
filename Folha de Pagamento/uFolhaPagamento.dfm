@@ -1,7 +1,7 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 633
-  Top = 147
-  Width = 568
+  Left = 1038
+  Top = 141
+  Width = 884
   Height = 611
   Caption = 'Folha de Pagamento'
   Color = clBtnFace
@@ -336,7 +336,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Left = 32
       Top = 48
       Width = 36
-      Height = 21
+      Height = 13
       Caption = 'C'#243'digo:'
       Layout = tlCenter
     end
@@ -344,7 +344,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Left = 37
       Top = 72
       Width = 31
-      Height = 21
+      Height = 13
       Caption = 'Nome:'
       Layout = tlCenter
     end
@@ -352,7 +352,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Left = 37
       Top = 96
       Width = 31
-      Height = 21
+      Height = 13
       Caption = 'Cargo:'
       Layout = tlCenter
     end
@@ -360,7 +360,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Left = 19
       Top = 120
       Width = 49
-      Height = 21
+      Height = 13
       Caption = 'Endere'#231'o:'
       Layout = tlCenter
     end
@@ -368,7 +368,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Left = 23
       Top = 144
       Width = 45
-      Height = 21
+      Height = 13
       Caption = 'Telefone:'
       Layout = tlCenter
     end

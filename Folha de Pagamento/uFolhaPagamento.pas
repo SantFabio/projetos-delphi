@@ -124,13 +124,19 @@ begin
 
     Caso você precise adicionar o item em uma posição específica da lista, em vez
     de no final, você pode usar o método Insert passando o índice desejado: ComboBox.Items.Insert(0, 'Primeira Opção');
+  cbEstados.Items.AddObject('Santa Catarina', TObject(42));
   }
   while not cdsFuncionarios.Eof do
     begin
-      cbNomeFuncionario.Items.Insert(wCount,(IntToStr(cdsFuncionariosbdCODFUNCIONARIO.AsInteger) + '- ' + cdsFuncionariosbdNOME.AsString));
+      cbNomeFuncionario.Items.InsertObject(
+        wCount,
+        cdsFuncionariosbdNOME.AsString,
+        TObject(cdsFuncionariosbdCODFUNCIONARIO.AsInteger)
+      );
+
       wCount := wCount + 1;
       cdsFuncionarios.Next;
-    end;
+      end;
   edCargoFuncionario.Clear;
 end;
 
@@ -256,16 +262,18 @@ var
   wPosicao: Integer;
 begin
      wIndexFuncionario := cbNomeFuncionario.ItemIndex;
-     wCodNomeFuncionario := cbNomeFuncionario.Items[wIndexFuncionario];
+     wCodNomeFuncionario := cbNomeFuncionario.Items.Objects[wCodNomeFuncionario];
+     {
      // Retorna a posição do caracter no array de chars
      wPosicao := Pos('-', wCodNomeFuncionario);
      //Copy(TextoOriginal, PosicaoInicial, QuantidadeDeCaracteres);
      //Recebe
      wIdFuncionarioEmFoco := StrToInt(Copy(wCodNomeFuncionario, (Length(wCodNomeFuncionario) - Length(wCodNomeFuncionario)) + 1 ,wPosicao - 1));
-
+     }
      cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
-     cdsFuncionarios.FindKey([wIdFuncionarioEmFoco]);
+     cdsFuncionarios.FindKey([wCodNomeFuncionario]);
      edCargoFuncionario.Text := cdsFuncionariosbdCARGO.Text;
+
 end;
 
 procedure TfrFolhaPagamento.FormCreate(Sender: TObject);
