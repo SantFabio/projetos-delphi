@@ -41,7 +41,7 @@ type
     btCalcular: TButton;
     btSalvar: TButton;
     btLimpar: TButton;
-    DBGrid1: TDBGrid;
+    folhaGrid: TDBGrid;
     pnCadastroUsuario: TPanel;
     lbCadastroFucionario: TLabel;
     lbCod: TLabel;
@@ -359,14 +359,11 @@ end;
 
 procedure TfrFolhaPagamento.pHabilitarCampos;
 begin
+    wCamposHabilitados:= True;
     //Habilita os campos De Proventos e Descontos
-    if not wCamposHabilitados then
+    if (cbNomeFuncionario.ItemIndex = -1) then
       begin
-        wCamposHabilitados := true;
-      end
-    else
-      begin
-        wCamposHabilitados := False;
+        wCamposHabilitados:= False;
       end;
 
      edSalarioBase.Enabled := wCamposHabilitados;
@@ -420,11 +417,11 @@ end;
 
 procedure TfrFolhaPagamento.btCalcularClick(Sender: TObject);
 begin
-  if (edSalarioBase.Text <> '0,00') or (edSalarioBase.Text <> '') then
+  if (edSalarioBase.Text <> '0,00') and (edSalarioBase.Text <> '') then
     begin
-      edTotalPVResultado.Text := CurrToStr(fCalcularTotalProventos);
-      edTotalDsResultado.Text := CurrToStr(fCalcularTotalDescontos);
-      edSalarioLiquido.Text := CurrToStr(wValorTotalPv - wValorDescontosTotalRD);
+      edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalProventos);
+      edTotalDsResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalDescontos);
+      edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00',wValorTotalPv - wValorDescontosTotalRD);
     end;
 end;
 
@@ -432,8 +429,16 @@ procedure TfrFolhaPagamento.btSalvarClick(Sender: TObject);
 var
  wcod: Integer;
 begin
-    wcod:= fGerarCodigoUnico;
-    cdsFolhaPagamento.Insert;
+    cdsFolhaPagamento.IndexFieldNames:= 'bdCODFOLHA';
+    if cdsFolhaPagamento.FindKey([wcod]) then
+      begin
+        cdsFolhaPagamento.Edit;
+      end
+    else
+      begin
+        cdsFolhaPagamento.Insert;
+        wcod:= fGerarCodigoUnico;
+      end;
     cdsFolhaPagamentobdCODFOLHA.AsInteger := wcod;
     cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger := cdsFuncionariosbdCODFUNCIONARIO.AsInteger;
     cdsFolhaPagamentobdNOMEFUNCIONARIO.AsString := cdsFuncionariosbdNOME.AsString;
@@ -477,10 +482,12 @@ begin
   edIRRF.Text := '0,00';
   edValeTransp.Text := '0,00';
   edTotaisDescontos.Text := '0,00';
-  edTotalPVResultado := 'R$ 0,00';
+  edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00', 0);
   edTotalDsResultado.Text := 'RS 0,00';
   edSalarioLiquido.Text := 'R$ 0,0';
 end;
+
+
 
 
 

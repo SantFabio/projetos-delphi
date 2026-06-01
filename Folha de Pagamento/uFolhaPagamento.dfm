@@ -1,7 +1,7 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 197
-  Top = 50
-  Width = 865
+  Left = 435
+  Top = 79
+  Width = 717
   Height = 540
   Caption = 'Folha de Pagamento'
   Color = clBtnFace
@@ -287,6 +287,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       Enabled = False
       TabOrder = 0
+      Text = 'R$ 0,00'
     end
     object edSalarioLiquido: TEdit
       Left = 120
@@ -301,6 +302,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
+      Text = 'R$ 0,00'
     end
     object edTotalDsResultado: TEdit
       Left = 376
@@ -309,9 +311,10 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       Enabled = False
       TabOrder = 2
+      Text = 'R$ 0,00'
     end
   end
-  object DBGrid1: TDBGrid
+  object folhaGrid: TDBGrid
     Left = 0
     Top = 376
     Width = 561
