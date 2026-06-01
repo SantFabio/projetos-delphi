@@ -56,8 +56,6 @@ type
     edTelefone: TEdit;
     btSalvarCadastro: TButton;
     btFechar: TButton;
-    cdsFolhaPagamento: TClientDataSet;
-    DataSource1: TDataSource;
     cdsFuncionarios: TClientDataSet;
     dsFuncionarios: TDataSource;
     cdsFuncionariosbdCODFUNCIONARIO: TIntegerField;
@@ -65,27 +63,67 @@ type
     cdsFuncionariosbdCARGO: TStringField;
     cdsFuncionariosbdENDERECO: TStringField;
     cdsFuncionariosbdTELEFONE: TStringField;
-    cdsFolhaPagamentobdCODFOLHA: TIntegerField;
-    cdsFolhaPagamentobdNOMEFUNCIONARIO: TStringField;
     edTotaisProventos: TEdit;
     Panel1: TPanel;
     Panel2: TPanel;
+    cdsFolhaPagamento: TClientDataSet;
+    cdsFolhaPagamentobdCODFOLHA: TIntegerField;
+    cdsFolhaPagamentobdCODFUNCIONARIO: TIntegerField;
+    cdsFolhaPagamentobdCARGO: TStringField;
+    cdsFolhaPagamentobdNOMEFUNCIONARIO: TStringField;
+    cdsFolhaPagamentobdSALARIOBASE: TCurrencyField;
+    cdsFolhaPagamentobdHORASEXTRAS: TCurrencyField;
+    cdsFolhaPagamentobdOUTROSVALORES: TCurrencyField;
+    cdsFolhaPagamentobdINSS: TCurrencyField;
+    cdsFolhaPagamentobdIRRF: TCurrencyField;
+    cdsFolhaPagamentobdVALETRANSPORTE: TCurrencyField;
+    cdsFolhaPagamentobdTOTALPROVENTOS: TCurrencyField;
+    cdsFolhaPagamentobdTOTALDESCONTOS: TCurrencyField;
+    cdsFolhaPagamentobdSALARIOLIQUIDO: TCurrencyField;
+    dsFolhaPagamento: TDataSource;
     procedure btCadastrarClick(Sender: TObject);
     procedure btFecharClick(Sender: TObject);
     procedure btSalvarCadastroClick(Sender: TObject);
     procedure cbNomeFuncionarioChange(Sender: TObject);
     procedure cbNomeFuncionarioSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure edSalarioBaseExit(Sender: TObject);
+    procedure edHorasExtrasExit(Sender: TObject);
+    procedure edOutrosExit(Sender: TObject);
+    procedure edSalarioBaseClick(Sender: TObject);
+    procedure edHorasExtrasClick(Sender: TObject);
+    procedure edOutrosClick(Sender: TObject);
+    procedure btCalcularClick(Sender: TObject);
+    procedure btSalvarClick(Sender: TObject);
+    procedure btLimparClick(Sender: TObject);
+
   private
     { private variable declarations }
     wIdFuncionarioEmFoco:Integer;
-    wValorINSS:Integer;
-    wValorIRRF:Integer;
+    wValorINSS: Currency;
+    wValorIRRF: Currency;
+    wValorValeT: Currency;
+    wValorINSSPorcentagem: Integer;
+    wValorIRRFPorcentagem: Integer;
+    wValorValeTPorcentagem: Integer;
+    wSalarioBase: Currency;
+    wValorHorasExtras: Currency;
+    wValorOutros: Currency;
+    wValorTotalPv: Currency;
+    wValorDescontosTotalRD: Currency;
+    wCamposHabilitados: Boolean;
+    wCodFolhaEmFoco: Integer;
+    wCodigoFolha: Integer;
     { function and procedure declarations }
     function fVerificaSeExiste(coluna:String; alvo: String): Boolean;
-    function fVerificaCargoEscolhido:String;
-    function fEstaCamposPreenchidos:Boolean;
+    function fVerificaCargoEscolhido: String;
+    function fEstaCamposPreenchidos: Boolean;
+    function fCalcularTotalDescontos: Currency;
+    function fCalcularTotalProventos: Currency;
+    function fGerarCodigoUnico: Integer;
+    procedure pLimparEditClick(PreEdit: TEdit);
     procedure pLimparCamposCadastroFuncionarios;
+    procedure pHabilitarCampos;
   public
     { Public declarations }
   end;
@@ -94,6 +132,8 @@ var
   frFolhaPagamento: TfrFolhaPagamento;
 
 implementation
+
+uses Math;
 
 {$R *.dfm}
 
@@ -258,7 +298,6 @@ end;
 procedure TfrFolhaPagamento.cbNomeFuncionarioSelect(Sender: TObject);
 var
   wIndexFuncionario: Integer;
-  wCodNomeFuncionario: String;
   wPosicao: Integer;
 begin
       // Essa função busca o o funcionario em foco e coloca o cargo dele no campo cargo
@@ -275,13 +314,174 @@ begin
      cdsFuncionarios.FindKey([wIdFuncionarioEmFoco]);
      edCargoFuncionario.Text := cdsFuncionariosbdCARGO.Text;
 
+     pHabilitarCampos;
 end;
 
 procedure TfrFolhaPagamento.FormCreate(Sender: TObject);
 begin
   edSalarioBase.Text := '0,00';
-  wValorINSS:= 9;
-  wValorIRRF:= 15;
+  wValorINSSPorcentagem:= 9;
+  wValorIRRFPorcentagem:= 15;
+  wValorValeTPorcentagem:= 6;
+  wValorINSS:= 0;
+  wValorIRRF:= 0;
+  wValorValeT:= 0;
+  wValorDescontosTotalRD := 0;
+  wCamposHabilitados := false;
+  wSalarioBase:= 0;
+  wValorHorasExtras:= 0;
+  wValorOutros:= 0;
+  wValorTotalPv:= 0;
+  wCodFolhaEmFoco:= 0;
+  wCodigoFolha:= 0;
 end;
+
+procedure TfrFolhaPagamento.edSalarioBaseExit(Sender: TObject);
+begin
+  wSalarioBase:= StrToCurrDef(edSalarioBase.Text, 0);
+  fCalcularTotalProventos;
+  fCalcularTotalDescontos;
+end;
+
+procedure TfrFolhaPagamento.edHorasExtrasExit(Sender: TObject);
+begin
+  wValorHorasExtras:= StrToCurrDef(edHorasExtras.Text, 0);
+  fCalcularTotalProventos;
+  fCalcularTotalDescontos;
+end;
+
+procedure TfrFolhaPagamento.edOutrosExit(Sender: TObject);
+begin
+  wValorOutros := StrToCurrDef(edOutros.Text, 0);
+  fCalcularTotalProventos;
+  fCalcularTotalDescontos;
+end;
+
+procedure TfrFolhaPagamento.pHabilitarCampos;
+begin
+    //Habilita os campos De Proventos e Descontos
+    if not wCamposHabilitados then
+      begin
+        wCamposHabilitados := true;
+      end
+    else
+      begin
+        wCamposHabilitados := False;
+      end;
+
+     edSalarioBase.Enabled := wCamposHabilitados;
+     edHorasExtras.Enabled := wCamposHabilitados;
+     edOutros.Enabled := wCamposHabilitados;
+end;
+
+procedure TfrFolhaPagamento.edSalarioBaseClick(Sender: TObject);
+begin
+  pLimparEditClick(Self.edSalarioBase);
+end;
+
+procedure TfrFolhaPagamento.pLimparEditClick(PreEdit: TEdit);
+begin
+  if (PreEdit.Text = '0,00') then
+    begin
+      PreEdit.Clear;
+    end;
+end;
+
+procedure TfrFolhaPagamento.edHorasExtrasClick(Sender: TObject);
+begin
+    pLimparEditClick(Self.edHorasExtras);
+end;
+
+procedure TfrFolhaPagamento.edOutrosClick(Sender: TObject);
+begin
+    pLimparEditClick(Self.edOutros);
+end;
+
+
+function TfrFolhaPagamento.fCalcularTotalProventos;
+begin
+  wValorTotalPv:= wSalarioBase + wValorHorasExtras + wValorOutros;
+  edTotaisProventos.Text := CurrToStr(wValorTotalPv);
+  Result:= wValorTotalPv;
+end;
+
+function TfrFolhaPagamento.fCalcularTotalDescontos: Currency;
+begin
+   wValorINSS := (wValorTotalPv * wValorINSSPorcentagem) / 100;
+   edINSS.Text := CurrToStr(wValorINSS);
+   wValorIRRF := (wValorTotalPv * wValorIRRFPorcentagem) / 100;
+   edIRRF.Text := CurrToStr(wValorIRRF);
+   wValorValeT := (wValorTotalPv * wValorValeTPorcentagem) / 100;
+   edValeTransp.Text := CurrToStr(wValorValeT);
+   wValorDescontosTotalRD := wValorINSS + wValorIRRF + wValorValeT;
+   edTotaisDescontos.Text := CurrToStr(wValorDescontosTotalRD);
+   Result:= wValorDescontosTotalRD;
+end;
+
+procedure TfrFolhaPagamento.btCalcularClick(Sender: TObject);
+begin
+  if (edSalarioBase.Text <> '0,00') or (edSalarioBase.Text <> '') then
+    begin
+      edTotalPVResultado.Text := CurrToStr(fCalcularTotalProventos);
+      edTotalDsResultado.Text := CurrToStr(fCalcularTotalDescontos);
+      edSalarioLiquido.Text := CurrToStr(wValorTotalPv - wValorDescontosTotalRD);
+    end;
+end;
+
+procedure TfrFolhaPagamento.btSalvarClick(Sender: TObject);
+var
+ wcod: Integer;
+begin
+    wcod:= fGerarCodigoUnico;
+    cdsFolhaPagamento.Insert;
+    cdsFolhaPagamentobdCODFOLHA.AsInteger := wcod;
+    cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger := cdsFuncionariosbdCODFUNCIONARIO.AsInteger;
+    cdsFolhaPagamentobdNOMEFUNCIONARIO.AsString := cdsFuncionariosbdNOME.AsString;
+    cdsFolhaPagamentobdCARGO.AsString := cdsFuncionariosbdCARGO.AsString;
+    cdsFolhaPagamentobdSALARIOBASE.AsCurrency := wSalarioBase;
+    cdsFolhaPagamentobdHORASEXTRAS.AsCurrency := wValorHorasExtras;
+    cdsFolhaPagamentobdOUTROSVALORES.AsCurrency := wValorOutros;
+    cdsFolhaPagamentobdINSS.AsCurrency := wValorINSS;
+    cdsFolhaPagamentobdIRRF.AsCurrency := wValorIRRF;
+    cdsFolhaPagamentobdVALETRANSPORTE.AsCurrency := wValorValeT;
+    cdsFolhaPagamentobdTOTALPROVENTOS.AsCurrency := wValorTotalPv;
+    cdsFolhaPagamentobdTOTALDESCONTOS.AsCurrency := wValorDescontosTotalRD;
+    cdsFolhaPagamentobdSALARIOLIQUIDO.AsCurrency := wSalarioBase;
+    cdsFolhaPagamento.Post;
+end;
+
+function TfrFolhaPagamento.fGerarCodigoUnico: Integer;
+var
+  wTotalRegistros: Integer;
+begin
+  wTotalRegistros := 0;
+  cdsFolhaPagamento.First;
+  while not cdsFolhaPagamento.Eof do
+    begin
+      wTotalRegistros := wTotalRegistros + 1;
+      cdsFolhaPagamento.Next;
+    end;
+  Result := wTotalRegistros + 1;
+end;
+
+procedure TfrFolhaPagamento.btLimparClick(Sender: TObject);
+begin
+  // Limpar os campos
+  cbNomeFuncionario.ItemIndex := -1;
+  edCargoFuncionario.Text:= '';
+  edSalarioBase.Text := '0,00';
+  edHorasExtras.Text := '0,00';
+  edOutros.Text := '0,00';
+  edTotaisProventos.Text := '0,00';
+  edINSS.Text := '0,00';
+  edIRRF.Text := '0,00';
+  edValeTransp.Text := '0,00';
+  edTotaisDescontos.Text := '0,00';
+  edTotalPVResultado := 'R$ 0,00';
+  edTotalDsResultado.Text := 'RS 0,00';
+  edSalarioLiquido.Text := 'R$ 0,0';
+end;
+
+
 
 end.

@@ -1,8 +1,8 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 1038
-  Top = 141
-  Width = 884
-  Height = 611
+  Left = 197
+  Top = 50
+  Width = 865
+  Height = 540
   Caption = 'Folha de Pagamento'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -124,7 +124,9 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       Enabled = False
       TabOrder = 0
-      Text = ' '
+      Text = '0,00'
+      OnClick = edSalarioBaseClick
+      OnExit = edSalarioBaseExit
     end
     object edHorasExtras: TEdit
       Left = 88
@@ -133,6 +135,9 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       Enabled = False
       TabOrder = 1
+      Text = '0,00'
+      OnClick = edHorasExtrasClick
+      OnExit = edHorasExtrasExit
     end
     object edOutros: TEdit
       Left = 88
@@ -141,6 +146,9 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       Enabled = False
       TabOrder = 2
+      Text = '0,00'
+      OnClick = edOutrosClick
+      OnExit = edOutrosExit
     end
     object edTotaisProventos: TEdit
       Left = 88
@@ -149,7 +157,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       Enabled = False
       TabOrder = 3
-      Text = ' '
+      Text = '0,00'
     end
   end
   object gbDescontos: TGroupBox
@@ -160,7 +168,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     Caption = 'Descontos'
     TabOrder = 2
     object lbINSS: TLabel
-      Left = 56
+      Left = 48
       Top = 24
       Width = 28
       Height = 21
@@ -169,7 +177,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbIRRF: TLabel
-      Left = 56
+      Left = 48
       Top = 48
       Width = 28
       Height = 21
@@ -178,7 +186,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbValeTransp: TLabel
-      Left = 21
+      Left = 13
       Top = 72
       Width = 63
       Height = 21
@@ -187,7 +195,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbTotalDescontos: TLabel
-      Left = 57
+      Left = 49
       Top = 96
       Width = 27
       Height = 21
@@ -196,36 +204,40 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object edINSS: TEdit
-      Left = 96
+      Left = 88
       Top = 24
       Width = 121
       Height = 21
       Enabled = False
       TabOrder = 0
+      Text = '0,00'
     end
     object edIRRF: TEdit
-      Left = 96
+      Left = 88
       Top = 48
       Width = 121
       Height = 21
       Enabled = False
       TabOrder = 1
+      Text = '0,00'
     end
     object edValeTransp: TEdit
-      Left = 96
+      Left = 88
       Top = 72
       Width = 121
       Height = 21
       Enabled = False
       TabOrder = 2
+      Text = '0,00'
     end
     object edTotaisDescontos: TEdit
-      Left = 96
+      Left = 88
       Top = 96
       Width = 121
       Height = 21
       Enabled = False
       TabOrder = 3
+      Text = '0,00'
     end
   end
   object gbResultado: TGroupBox
@@ -305,12 +317,87 @@ object frFolhaPagamento: TfrFolhaPagamento
     Width = 561
     Height = 201
     Align = alCustom
+    DataSource = dsFolhaPagamento
     TabOrder = 4
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
     TitleFont.Name = 'MS Sans Serif'
     TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'bdCODFOLHA'
+        Title.Caption = 'Cod. Folha Pgto.'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdNOMEFUNCIONARIO'
+        Title.Caption = 'Nome Func.'
+        Width = 254
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdCARGO'
+        Title.Caption = 'Cargo'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdSALARIOBASE'
+        Title.Caption = 'Sal'#225'rio Base'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdHORASEXTRAS'
+        Title.Caption = 'Hrs. Extras'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdOUTROSVALORES'
+        Title.Caption = 'Outros'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdINSS'
+        Title.Caption = 'INSS'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdIRRF'
+        Title.Caption = 'IRRF'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdVALETRANSPORTE'
+        Title.Caption = 'Vale Trans.'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdTOTALPROVENTOS'
+        Title.Caption = 'Total Prov.'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdTOTALDESCONTOS'
+        Title.Caption = 'Total Des.'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdSALARIOLIQUIDO'
+        Title.Caption = 'Sal'#225'rio L'#237'quido'
+        Visible = True
+      end>
   end
   object pnCadastroUsuario: TPanel
     Left = 596
@@ -462,6 +549,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 0
+      OnClick = btCalcularClick
     end
     object btSalvar: TButton
       Left = 96
@@ -476,6 +564,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
+      OnClick = btSalvarClick
     end
     object btLimpar: TButton
       Left = 192
@@ -490,24 +579,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
+      OnClick = btLimparClick
     end
-  end
-  object cdsFolhaPagamento: TClientDataSet
-    Aggregates = <>
-    Params = <>
-    Left = 568
-    Top = 272
-    object cdsFolhaPagamentobdCODFOLHA: TIntegerField
-      FieldName = 'bdCODFOLHA'
-    end
-    object cdsFolhaPagamentobdNOMEFUNCIONARIO: TStringField
-      FieldName = 'bdNOMEFUNCIONARIO'
-      Size = 50
-    end
-  end
-  object DataSource1: TDataSource
-    Left = 600
-    Top = 272
   end
   object cdsFuncionarios: TClientDataSet
     Active = True
@@ -546,7 +619,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     IndexFieldNames = 'bdCODFUNCIONARIO'
     Params = <>
     StoreDefs = True
-    Left = 568
+    Left = 560
     Top = 304
     Data = {
       A80000009619E0BD010000001800000005000000000003000000A80010626443
@@ -578,5 +651,140 @@ object frFolhaPagamento: TfrFolhaPagamento
     DataSet = cdsFuncionarios
     Left = 600
     Top = 304
+  end
+  object cdsFolhaPagamento: TClientDataSet
+    Active = True
+    Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'bdCODFOLHA'
+        DataType = ftInteger
+      end
+      item
+        Name = 'bdCODFUNCIONARIO'
+        DataType = ftInteger
+      end
+      item
+        Name = 'bdCARGO'
+        DataType = ftString
+        Size = 30
+      end
+      item
+        Name = 'bdNOMEFUNCIONARIO'
+        DataType = ftString
+        Size = 150
+      end
+      item
+        Name = 'bdSALARIOBASE'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdHORASEXTRAS'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdOUTROSVALORES'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdINSS'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdIRRF'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdVALETRANSPORTE'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdTOTALPROVENTOS'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdTOTALDESCONTOS'
+        DataType = ftCurrency
+      end
+      item
+        Name = 'bdSALARIOLIQUIDO'
+        DataType = ftCurrency
+      end>
+    IndexDefs = <
+      item
+        Name = 'iCODFOLHA'
+        Fields = 'bdCODFOLHA'
+        Options = [ixPrimary, ixUnique]
+      end>
+    IndexName = 'iCODFOLHA'
+    PacketRecords = 0
+    Params = <>
+    StoreDefs = True
+    Left = 560
+    Top = 272
+    Data = {
+      020200009619E0BD01000000180000000D00000000000300000002020A626443
+      4F44464F4C48410400010000000000106264434F4446554E43494F4E4152494F
+      0400010000000000076264434152474F01004900000001000557494454480200
+      02001E001162644E4F4D4546554E43494F4E4152494F01004900000001000557
+      494454480200020096000D626453414C4152494F424153450800040000000100
+      07535542545950450200490006004D6F6E6579000D6264484F52415345585452
+      4153080004000000010007535542545950450200490006004D6F6E6579000F62
+      644F5554524F5356414C4F524553080004000000010007535542545950450200
+      490006004D6F6E657900066264494E5353080004000000010007535542545950
+      450200490006004D6F6E65790006626449525246080004000000010007535542
+      545950450200490006004D6F6E65790010626456414C455452414E53504F5254
+      45080004000000010007535542545950450200490006004D6F6E657900106264
+      544F54414C50524F56454E544F53080004000000010007535542545950450200
+      490006004D6F6E657900106264544F54414C444553434F4E544F530800040000
+      00010007535542545950450200490006004D6F6E65790010626453414C415249
+      4F4C49515549444F080004000000010007535542545950450200490006004D6F
+      6E6579000000}
+    object cdsFolhaPagamentobdCODFOLHA: TIntegerField
+      FieldName = 'bdCODFOLHA'
+    end
+    object cdsFolhaPagamentobdCODFUNCIONARIO: TIntegerField
+      FieldName = 'bdCODFUNCIONARIO'
+    end
+    object cdsFolhaPagamentobdCARGO: TStringField
+      FieldName = 'bdCARGO'
+      Size = 30
+    end
+    object cdsFolhaPagamentobdNOMEFUNCIONARIO: TStringField
+      FieldName = 'bdNOMEFUNCIONARIO'
+      Size = 150
+    end
+    object cdsFolhaPagamentobdSALARIOBASE: TCurrencyField
+      FieldName = 'bdSALARIOBASE'
+    end
+    object cdsFolhaPagamentobdHORASEXTRAS: TCurrencyField
+      FieldName = 'bdHORASEXTRAS'
+    end
+    object cdsFolhaPagamentobdOUTROSVALORES: TCurrencyField
+      FieldName = 'bdOUTROSVALORES'
+    end
+    object cdsFolhaPagamentobdINSS: TCurrencyField
+      FieldName = 'bdINSS'
+    end
+    object cdsFolhaPagamentobdIRRF: TCurrencyField
+      FieldName = 'bdIRRF'
+    end
+    object cdsFolhaPagamentobdVALETRANSPORTE: TCurrencyField
+      FieldName = 'bdVALETRANSPORTE'
+    end
+    object cdsFolhaPagamentobdTOTALPROVENTOS: TCurrencyField
+      FieldName = 'bdTOTALPROVENTOS'
+    end
+    object cdsFolhaPagamentobdTOTALDESCONTOS: TCurrencyField
+      FieldName = 'bdTOTALDESCONTOS'
+    end
+    object cdsFolhaPagamentobdSALARIOLIQUIDO: TCurrencyField
+      FieldName = 'bdSALARIOLIQUIDO'
+    end
+  end
+  object dsFolhaPagamento: TDataSource
+    DataSet = cdsFolhaPagamento
+    Left = 596
+    Top = 269
   end
 end
