@@ -1,6 +1,6 @@
 object frCalculoProduto: TfrCalculoProduto
-  Left = 764
-  Top = 123
+  Left = 761
+  Top = 202
   Width = 507
   Height = 453
   Caption = 'C'#225'lculo de Produto'
