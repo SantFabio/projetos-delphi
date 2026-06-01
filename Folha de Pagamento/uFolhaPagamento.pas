@@ -261,8 +261,9 @@ var
   wCodNomeFuncionario: String;
   wPosicao: Integer;
 begin
+      // Essa função busca o o funcionario em foco e coloca o cargo dele no campo cargo
      wIndexFuncionario := cbNomeFuncionario.ItemIndex;
-     wCodNomeFuncionario := cbNomeFuncionario.Items.Objects[wCodNomeFuncionario];
+     wIdFuncionarioEmFoco := Integer(cbNomeFuncionario.Items.Objects[wIndexFuncionario]);
      {
      // Retorna a posição do caracter no array de chars
      wPosicao := Pos('-', wCodNomeFuncionario);
@@ -271,7 +272,7 @@ begin
      wIdFuncionarioEmFoco := StrToInt(Copy(wCodNomeFuncionario, (Length(wCodNomeFuncionario) - Length(wCodNomeFuncionario)) + 1 ,wPosicao - 1));
      }
      cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
-     cdsFuncionarios.FindKey([wCodNomeFuncionario]);
+     cdsFuncionarios.FindKey([wIdFuncionarioEmFoco]);
      edCargoFuncionario.Text := cdsFuncionariosbdCARGO.Text;
 
 end;
