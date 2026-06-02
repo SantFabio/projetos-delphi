@@ -1,7 +1,7 @@
 object frFolhaPagamento: TfrFolhaPagamento
   Left = 485
   Top = 188
-  Width = 571
+  Width = 948
   Height = 638
   Caption = 'Folha de Pagamento'
   Color = clBtnFace

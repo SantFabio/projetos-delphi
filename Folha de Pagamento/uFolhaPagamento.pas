@@ -404,7 +404,7 @@ end;
 function TfrFolhaPagamento.fCalcularTotalProventos;
 begin
   wValorTotalPv:= wSalarioBase + wValorHorasExtras + wValorOutros;
-  edTotaisProventos.Text := CurrToStr(wValorTotalPv);
+  edTotaisProventos.Text := FormatCurr('#,##0.00',wValorTotalPv);
   Result:= wValorTotalPv;
 end;
 
@@ -450,9 +450,8 @@ begin
     else
       begin
         cdsFolhaPagamento.Insert;
+        cdsFolhaPagamentobdCODFOLHA.AsInteger := wcod;
       end;
-
-    cdsFolhaPagamentobdCODFOLHA.AsInteger := wcod;
     cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger := cdsFuncionariosbdCODFUNCIONARIO.AsInteger;
     cdsFolhaPagamentobdNOMEFUNCIONARIO.AsString := cdsFuncionariosbdNOME.AsString;
     cdsFolhaPagamentobdCARGO.AsString := cdsFuncionariosbdCARGO.AsString;
