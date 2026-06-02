@@ -1,6 +1,6 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 484
-  Top = 31
+  Left = 219
+  Top = 39
   Width = 578
   Height = 638
   Caption = 'Folha de Pagamento'
@@ -331,13 +331,13 @@ object frFolhaPagamento: TfrFolhaPagamento
       item
         Expanded = False
         FieldName = 'bdCODFOLHA'
-        Title.Caption = 'Cod. da Folha'
+        Title.Caption = 'Cod. Folha Pgto.'
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'bdNOMEFUNCIONARIO'
-        Title.Caption = 'Funcion'#225'rio'
+        Title.Caption = 'Nome Func.'
         Width = 142
         Visible = True
       end
@@ -546,7 +546,6 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 89
       Height = 25
       Caption = 'Calcular'
-      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -562,7 +561,6 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 89
       Height = 25
       Caption = 'Salvar'
-      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -578,7 +576,6 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 89
       Height = 25
       Caption = 'Limpar'
-      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11

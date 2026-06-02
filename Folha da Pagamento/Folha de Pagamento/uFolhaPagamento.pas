@@ -105,6 +105,8 @@ type
     wCodFolhaEmFoco: Integer;
     wCodigoFolha: Integer;
 
+    wValorINSSPorcentagem: Integer;
+    wValorIRRFPorcentagem: Integer;
     wValorValeTPorcentagem: Integer;
 
     wSalarioBase: Currency;
@@ -115,7 +117,7 @@ type
     wValorINSS: Currency;
     wValorIRRF: Currency;
     wValorValeT: Currency;
-    wValorDescontosTotal: Currency;
+    wValorDescontosTotalRD: Currency;
 
     wCamposHabilitados: Boolean;
 
@@ -126,8 +128,6 @@ type
     function fCalcularTotalDescontos: Currency;
     function fCalcularTotalProventos: Currency;
     function fGerarCodigoUnico: Integer;
-    function fCalculaValorINSS: Currency;
-    function fCalculaValorIRRF: Currency;
     procedure pCarregarCargoFuncionario;
     procedure pCarregarFolhaExistente;
     procedure pLimparEditClick(PreEdit: TEdit);
@@ -329,11 +329,13 @@ end;
 procedure TfrFolhaPagamento.FormCreate(Sender: TObject);
 begin
   edSalarioBase.Text := FormatCurr('#,##0.00',0);
+  wValorINSSPorcentagem:= 9;
+  wValorIRRFPorcentagem:= 15;
   wValorValeTPorcentagem:= 6;
   wValorINSS:= 0;
   wValorIRRF:= 0;
   wValorValeT:= 0;
-  wValorDescontosTotal := 0;
+  wValorDescontosTotalRD := 0;
   wCamposHabilitados := false;
   wSalarioBase:= 0;
   wValorHorasExtras:= 0;
@@ -382,9 +384,6 @@ begin
      edSalarioBase.Enabled := wCamposHabilitados;
      edHorasExtras.Enabled := wCamposHabilitados;
      edOutros.Enabled := wCamposHabilitados;
-     btCalcular.Enabled := true;
-     btSalvar.Enabled   := true;
-     btLimpar.Enabled   := true;
 end;
 
 procedure TfrFolhaPagamento.edSalarioBaseClick(Sender: TObject);
@@ -420,15 +419,15 @@ end;
 
 function TfrFolhaPagamento.fCalcularTotalDescontos: Currency;
 begin
-   wValorINSS := fCalculaValorINSS;
+   wValorINSS := (wValorTotalPv * wValorINSSPorcentagem) / 100;
    edINSS.Text := FormatCurr('#,##0.00',wValorINSS);
-   wValorIRRF := fCalculaValorIRRF;
+   wValorIRRF := (wValorTotalPv * wValorIRRFPorcentagem) / 100;
    edIRRF.Text := FormatCurr('#,##0.00',wValorIRRF);
    wValorValeT := (wSalarioBase * wValorValeTPorcentagem) / 100;
    edValeTransp.Text := FormatCurr('#,##0.00',wValorValeT);
-   wValorDescontosTotal := wValorINSS + wValorIRRF + wValorValeT;
-   edTotaisDescontos.Text := FormatCurr('#,##0.00',wValorDescontosTotal);
-   Result:= wValorDescontosTotal;
+   wValorDescontosTotalRD := wValorINSS + wValorIRRF + wValorValeT;
+   edTotaisDescontos.Text := FormatCurr('#,##0.00',wValorDescontosTotalRD);
+   Result:= wValorDescontosTotalRD;
 end;
 
 procedure TfrFolhaPagamento.btCalcularClick(Sender: TObject);
@@ -437,7 +436,7 @@ begin
     begin
       edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalProventos);
       edTotalDsResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalDescontos);
-      edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00', wValorTotalPv - wValorDescontosTotal);
+      edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00',wValorTotalPv - wValorDescontosTotalRD);
     end;
 end;
 
@@ -451,7 +450,6 @@ begin
         edSalarioBase.SetFocus;
         Exit;
       end;
-
     wcod := fGerarCodigoUnico;
     cdsFolhaPagamento.IndexFieldNames := 'bdCODFUNCIONARIO';
     if cdsFolhaPagamento.FindKey([wCodFuncionarioEmFoco]) then
@@ -473,8 +471,8 @@ begin
     cdsFolhaPagamentobdIRRF.AsCurrency := wValorIRRF;
     cdsFolhaPagamentobdVALETRANSPORTE.AsCurrency := wValorValeT;
     cdsFolhaPagamentobdTOTALPROVENTOS.AsCurrency := wValorTotalPv;
-    cdsFolhaPagamentobdTOTALDESCONTOS.AsCurrency := wValorDescontosTotal;
-    cdsFolhaPagamentobdSALARIOLIQUIDO.AsCurrency := wValorTotalPv - wValorDescontosTotal;
+    cdsFolhaPagamentobdTOTALDESCONTOS.AsCurrency := wValorDescontosTotalRD;
+    cdsFolhaPagamentobdSALARIOLIQUIDO.AsCurrency := wValorTotalPv - wValorDescontosTotalRD;
     cdsFolhaPagamento.Post;
 end;
 
@@ -494,7 +492,7 @@ end;
 
 procedure TfrFolhaPagamento.btLimparClick(Sender: TObject);
 begin
-  // Limpa os campos
+  // Limpar os campos
   cbNomeFuncionario.ItemIndex := -1;
   pLimparCampos;
 end;
@@ -502,14 +500,14 @@ end;
 procedure TfrFolhaPagamento.pLimparCampos;
 begin
   edCargoFuncionario.Text:= '';
-  edSalarioBase.Text := FormatCurr('#,##0.00', 0);
-  edHorasExtras.Text := FormatCurr('#,##0.00', 0);
-  edOutros.Text := FormatCurr('#,##0.00', 0);
-  edTotaisProventos.Text := FormatCurr('#,##0.00', 0);
-  edINSS.Text := FormatCurr('#,##0.00', 0);
-  edIRRF.Text := FormatCurr('#,##0.00', 0);
-  edValeTransp.Text := FormatCurr('#,##0.00', 0);
-  edTotaisDescontos.Text := FormatCurr('#,##0.00', 0);
+  edSalarioBase.Text := '0,00';
+  edHorasExtras.Text := '0,00';
+  edOutros.Text := '0,00';
+  edTotaisProventos.Text := '0,00';
+  edINSS.Text := '0,00';
+  edIRRF.Text := '0,00';
+  edValeTransp.Text := '0,00';
+  edTotaisDescontos.Text := '0,00';
   edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00', 0);
   edTotalDsResultado.Text := FormatCurr('"R$ "#,##0.00', 0);
   edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00', 0);
@@ -527,13 +525,9 @@ procedure TfrFolhaPagamento.pCarregarCargoFuncionario;
 begin
   cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
   if cdsFuncionarios.FindKey([wCodFuncionarioEmFoco]) then
-    begin
-      edCargoFuncionario.Text := cdsFuncionariosbdCARGO.AsString;
-    end
+    edCargoFuncionario.Text := cdsFuncionariosbdCARGO.AsString
   else
-    begin
-      edCargoFuncionario.Text := '';
-    end;
+    edCargoFuncionario.Text := '';
   edCargoFuncionario.Text := cdsFuncionariosbdCARGO.AsString;
 end;
 
@@ -566,69 +560,10 @@ begin
   // se acerssamos o cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger será o da linha clicada;
 
   wCodFuncionarioEmFoco := cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger;
-  //O comando procura em qual linha está o código 15 e faz o ComboBox selecioná-la na tela
   cbNomeFuncionario.ItemIndex := cbNomeFuncionario.Items.IndexOfObject(TObject(wCodFuncionarioEmFoco));
   pCarregarCargoFuncionario;
   pHabilitarCampos;
   pCarregarFolhaExistente;
-end;
-
-function TfrFolhaPagamento.fCalculaValorINSS: Currency;
-begin
-  //DescontoINSS = (Base de Cálculo * Alíquota) / 100 - Parcela a Deduzir
-  if wValorTotalPv <=  1621 then
-     begin
-        Result:= ((wValorTotalPv * 7.5) / 100) - 0;
-        Exit;
-     end
-  else if (wValorTotalPv >  1621) and (wValorTotalPv <=  2902.84) then
-    begin
-      Result:= ((wValorTotalPv * 9) / 100) - 24.35;
-      Exit;
-    end
-  else if (wValorTotalPv >  2902.84) and (wValorTotalPv <=  4354.27) then
-    begin
-      Result:= ((wValorTotalPv * 12) / 100) - 111.40;
-      Exit;
-    end
-  else if (wValorTotalPv >  4354.27) and (wValorTotalPv <=  8475.55) then
-    begin
-      Result:= ((wValorTotalPv * 14) / 100) - 198.49;
-      Exit;
-    end;
-  // Valores maior que o Teto de 8475.55, o valor é fixo 996.17
-  Result:= 996.17;
-end;
-
-function TfrFolhaPagamento.fCalculaValorIRRF: Currency;
-var
-  wBaseCalculo: Currency;
-begin
-  //Imposto Retido = (Base de Cálculo do IRRF * Alíquota) / 100 - Parcela a Deduzir
-  wBaseCalculo:= wValorTotalPv - wValorINSS;
-
-  if wBaseCalculo <=  2428.80 then
-     begin
-        Result:= 0;
-        Exit;
-     end
-  else if (wBaseCalculo >  2428.81) and (wBaseCalculo <=  2826.65) then
-    begin
-      Result:= ((wBaseCalculo * 7.5) / 100) - 182.16;
-      Exit;
-    end
-  else if (wBaseCalculo >  2826.65) and (wBaseCalculo <=  3751.05) then
-    begin
-      Result:= ((wBaseCalculo * 15) / 100) - 394.16;
-      Exit;
-    end
-  else if (wBaseCalculo >  3751.05) and (wBaseCalculo <=  4664.68) then
-    begin
-      Result:= ((wBaseCalculo * 22.5) / 100) - 675.49;
-      Exit;
-    end;
-  // Valores maior que 4.664,68 a aliquota é fixa em 27,5% e o valor a da Parcela a Deduzir é R$ 908,73
-  Result:= ((wBaseCalculo * 27.5) / 100) - 908.73;
 end;
 
 end.
