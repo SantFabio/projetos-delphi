@@ -407,12 +407,18 @@ end;
 
 procedure TfrFolhaPagamento.edOutrosClick(Sender: TObject);
 begin
+    {
+
+    }
     pLimparEditClick(Self.edOutros);
 end;
 
 
 function TfrFolhaPagamento.fCalcularTotalProventos;
 begin
+  {
+    Função: Calcular proventos
+  }
   wValorTotalPv:= wSalarioBase + wValorHorasExtras + wValorOutros;
   edTotaisProventos.Text := FormatCurr('#,##0.00',wValorTotalPv);
   Result:= wValorTotalPv;
@@ -420,6 +426,9 @@ end;
 
 function TfrFolhaPagamento.fCalcularTotalDescontos: Currency;
 begin
+  {
+    Função: Calcula e completa os velores dos calculos em seus campos.
+  }
    wValorINSS := fCalculaValorINSS;
    edINSS.Text := FormatCurr('#,##0.00',wValorINSS);
    wValorIRRF := fCalculaValorIRRF;
@@ -433,6 +442,9 @@ end;
 
 procedure TfrFolhaPagamento.btCalcularClick(Sender: TObject);
 begin
+  {
+    Função: Botão de calcular e completar os calculos;
+  }
   if (edSalarioBase.Text <> '0,00') and (edSalarioBase.Text <> '') then
     begin
       edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalProventos);
@@ -445,6 +457,9 @@ procedure TfrFolhaPagamento.btSalvarClick(Sender: TObject);
 var
  wcod: Integer;
 begin
+  {
+    Função: Salvar o calculo no banco de dados;
+  }
   // Se o Salario for = 0, não roda, é necessário ter um valor como salario base;
     if (wSalarioBase = 0) then
       begin
@@ -482,6 +497,10 @@ function TfrFolhaPagamento.fGerarCodigoUnico: Integer;
 var
   wTotalRegistros: Integer;
 begin
+  {
+    Função: Gerar um código que não se repita, levando em consideração o tamanho
+    dos registros;
+  }
   wTotalRegistros := 0;
   cdsFolhaPagamento.First;
   while not cdsFolhaPagamento.Eof do
@@ -494,6 +513,9 @@ end;
 
 procedure TfrFolhaPagamento.btLimparClick(Sender: TObject);
 begin
+  {
+    Função: Botão de limpar campos.
+  }
   // Limpa os campos
   cbNomeFuncionario.ItemIndex := -1;
   pLimparCampos;
@@ -501,6 +523,9 @@ end;
 
 procedure TfrFolhaPagamento.pLimparCampos;
 begin
+  {
+    Função: Limpa os campos de calculo de folha;
+  }
   edCargoFuncionario.Text:= '';
   edSalarioBase.Text := FormatCurr('#,##0.00', 0);
   edHorasExtras.Text := FormatCurr('#,##0.00', 0);
@@ -517,6 +542,10 @@ end;
 
 procedure TfrFolhaPagamento.pVerificarEditVazio(Sender: TEdit);
 begin
+  {
+    Função: O Edit é passado como parÂmetro e verifica se está vazio, se sim
+    ele retorna a formatação correta de valores reais;
+  }
    if Trim(Sender.Text) = '' then
     begin
       Sender.Text:= FormatCurr('#,##0.00', 0);
@@ -539,6 +568,10 @@ end;
 
 procedure TfrFolhaPagamento.pCarregarFolhaExistente;
 begin
+  {
+  Função: Verifica se existe alguma folha com o cod do funcionario selecionado
+  Caso sim, ele preenche os campos, para uma possivel edição.
+  }
   // Define o índice de busca para o código do funcionário
   cdsFolhaPagamento.IndexFieldNames := 'bdCODFUNCIONARIO';
   
@@ -575,6 +608,7 @@ end;
 
 function TfrFolhaPagamento.fCalculaValorINSS: Currency;
 begin
+  //Função: Calcula o valor do INSS
   //DescontoINSS = (Base de Cálculo * Alíquota) / 100 - Parcela a Deduzir
   if wValorTotalPv <=  1621 then
      begin
@@ -604,6 +638,7 @@ function TfrFolhaPagamento.fCalculaValorIRRF: Currency;
 var
   wBaseCalculo: Currency;
 begin
+  //Função: Calcula o valor do IRRF
   //Imposto Retido = (Base de Cálculo do IRRF * Alíquota) / 100 - Parcela a Deduzir
   wBaseCalculo:= wValorTotalPv - wValorINSS;
 
