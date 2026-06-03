@@ -145,6 +145,7 @@ type
     procedure pLimparCamposCadastroFuncionarios;
     procedure pHabilitarCampos;
     procedure pLimparCampos;
+    function fValidaCampoMonetario(PREdit: TEdit): Boolean;
 
   public
     { Public declarations }
@@ -354,24 +355,42 @@ end;
 
 procedure TfrFolhaPagamento.edSalarioBaseExit(Sender: TObject);
 begin
-  wSalarioBase            := StrToCurrDef(edSalarioBase.Text, 0);
-  edSalarioBase.Text      := FormatCurr('#,##0.00',wSalarioBase);
+  if not fValidaCampoMonetario(edSalarioBase) then
+    begin
+      ShowMessage('É necessário um valor monetário valido!');
+      edSalarioBase.SetFocus;
+      Exit;
+    end;
+  wSalarioBase          := StrToCurrDef(edSalarioBase.Text, 0);
+  edSalarioBase.Text          := FormatCurr('#,##0.00',wSalarioBase);
   fCalcularTotalProventos;
   fCalcularTotalDescontos;
 end;
 
 procedure TfrFolhaPagamento.edHorasExtrasExit(Sender: TObject);
 begin
-  wValorHorasExtras       := StrToCurrDef(edHorasExtras.Text, 0);
-  edHorasExtras.Text      := FormatCurr('#,##0.00',wValorHorasExtras);
+  if not fValidaCampoMonetario(edHorasExtras) then
+    begin
+      ShowMessage('É necessário um valor monetário valido!');
+      edHorasExtras.SetFocus;
+      Exit;
+    end;
+  wValorHorasExtras          := StrToCurrDef(edHorasExtras.Text, 0);
+  edHorasExtras.Text          := FormatCurr('#,##0.00',wValorHorasExtras);
   fCalcularTotalProventos;
   fCalcularTotalDescontos;
 end;
 
 procedure TfrFolhaPagamento.edOutrosExit(Sender: TObject);
 begin
-  wValorOutros            := StrToCurrDef(edOutros.Text, 0);
-  edOutros.Text           := FormatCurr('#,##0.00',wValorOutros);
+  if not fValidaCampoMonetario(edOutros) then
+    begin
+      ShowMessage('É necessário um valor monetário valido!');
+      edOutros.SetFocus;
+      Exit;
+    end;
+  wValorOutros          := StrToCurrDef(edOutros.Text, 0);
+  edOutros.Text          := FormatCurr('#,##0.00',wValorOutros);
   fCalcularTotalProventos;
   fCalcularTotalDescontos;
 end;
@@ -392,7 +411,6 @@ begin
      edHorasExtras.Enabled := wCamposHabilitados;
      edOutros.Enabled      := wCamposHabilitados;
      btCalcular.Enabled    := wCamposHabilitados;
-     btSalvar.Enabled      := wCamposHabilitados;
      btLimpar.Enabled      := wCamposHabilitados;
      cbMes.Enabled         := wCamposHabilitados;
      seAno.Enabled         := wCamposHabilitados
@@ -450,7 +468,7 @@ end;
 
 procedure TfrFolhaPagamento.btCalcularClick(Sender: TObject);
 begin
-  {
+{
     Função: Botão de calcular e completar os calculos;
   }
   if (edSalarioBase.Text <> '0,00') and (edSalarioBase.Text <> '') then
@@ -458,6 +476,7 @@ begin
       edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalProventos);
       edTotalDsResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalDescontos);
       edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00', wValorTotalPv - wValorDescontosTotal);
+      btSalvar.Enabled  := True;
     end;
 end;
 
@@ -482,13 +501,9 @@ begin
     Função: Salvar o calculo no banco de dados;
   }
   // Se o Salario for = 0, ou o mês nÃo foi selecionado, o programa não roda, é necessário ter um valor como salario base e mês para osalvar e calcular;
-    if (wSalarioBase = 0) then
+    if (cbMes.ItemIndex = -1) then
       begin
-        edSalarioBase.SetFocus;
-        Exit;
-      end
-    else if (cbMes.ItemIndex = -1) then
-      begin
+        ShowMessage('Adcione o mês da Compentência');
         cbMes.SetFocus;
         Exit;
       end;
@@ -536,7 +551,11 @@ begin
     cdsFolhaPagamentobdSALARIOLIQUIDO.AsCurrency := wTotalPvTemp - wTotalDsTemp;
 
     cdsFolhaPagamento.Post;
-
+    //desabilita o botão Salvar
+    btSalvar.Enabled := False;
+    //Limpa os campos opós salvar essa folha;
+    cbNomeFuncionario.ItemIndex := -1;
+    pLimparCampos;
 end;
 
 function TfrFolhaPagamento.fGerarCodigoUnico: Integer;
@@ -700,6 +719,11 @@ end;
 procedure TfrFolhaPagamento.cdsFolhaPagamentoAfterScroll(
   DataSet: TDataSet);
 begin
+  {
+  Quando o usuário clica em uma linha (row) de um DBGrid, o componente
+  visual precisa "avisar" o CDS para mover o seu cursor interno
+  para aquele registro.
+  }
   if not cdsFolhaPagamento.IsEmpty then
     begin
         // Atualiza as variáveis de controle com o registro ativo
@@ -709,7 +733,7 @@ begin
       // Sincroniza a interface visual (ComboBoxes e SpinEdit)
       cbNomeFuncionario.ItemIndex := cbNomeFuncionario.Items.IndexOfObject(TObject(wCodFuncionarioEmFoco));
       cbMes.ItemIndex             := cbMes.Items.IndexOf(cdsFolhaPagamentobdMESCOMPETENCIA.AsString);
-      seAno.OnChange := nil;
+      seAno.OnChange := nil; //Forçando a execução com nil
       seAno.Value                 := cdsFolhaPagamentobdANOCOMPETENCIA.AsInteger;
 
      // Atualiza o cargo e habilita os campos
@@ -731,8 +755,9 @@ end;
 
 procedure TfrFolhaPagamento.folhaGridTitleClick(Column: TColumn);
 begin
-    { Função: Ordena a Grid de acordo a coluna clicada,dSe já estiver ordenado por essa coluna de forma
-    crescente, muda para decrescente (usando o índice) }
+    { Função: Ordena a Grid de acordo a coluna clicada, Se já estiver
+    ordenado por essa coluna de forma crescente, muda
+    para decrescente (usando o índice) }
     // Para ordenar de forma decrescente no ClientDataSet, adicionamos ':D' ao nome do campo
   if cdsFolhaPagamento.IndexFieldNames = Column.FieldName then
     begin
@@ -741,6 +766,18 @@ begin
   else
     begin
       cdsFolhaPagamento.IndexFieldNames := Column.FieldName;
+    end;
+end;
+
+
+function TfrFolhaPagamento.fValidaCampoMonetario(PREdit: TEdit): Boolean;
+var
+  wValorMonetarioTemp: Currency;
+begin
+  Result := True;
+  if not TryStrToCurr(PREdit.Text, wValorMonetarioTemp) then
+    begin
+       Result:= False;
     end;
 end;
 
