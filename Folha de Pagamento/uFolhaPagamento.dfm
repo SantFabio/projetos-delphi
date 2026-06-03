@@ -1,8 +1,8 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 484
-  Top = 31
-  Width = 578
-  Height = 638
+  Left = 199
+  Top = 119
+  Width = 639
+  Height = 605
   Caption = 'Folha de Pagamento'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,7 +17,7 @@ object frFolhaPagamento: TfrFolhaPagamento
   object gbFuncionario: TGroupBox
     Left = 8
     Top = 8
-    Width = 545
+    Width = 561
     Height = 81
     Caption = 'Funcion'#225'rio'
     TabOrder = 0
@@ -31,13 +31,20 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbCargo: TLabel
-      Left = 344
+      Left = 360
       Top = 24
       Width = 31
       Height = 21
       AutoSize = False
       Caption = 'Cargo:'
       Layout = tlCenter
+    end
+    object lbCompetencia: TLabel
+      Left = 326
+      Top = 53
+      Width = 65
+      Height = 13
+      Caption = 'Compet'#234'ncia:'
     end
     object cbNomeFuncionario: TComboBox
       Left = 48
@@ -50,16 +57,16 @@ object frFolhaPagamento: TfrFolhaPagamento
       OnSelect = cbNomeFuncionarioSelect
     end
     object edCargoFuncionario: TEdit
-      Left = 384
+      Left = 400
       Top = 24
-      Width = 145
+      Width = 153
       Height = 21
       Enabled = False
       TabOrder = 1
     end
     object btCadastrar: TButton
       Left = 32
-      Top = 48
+      Top = 49
       Width = 89
       Height = 25
       Caption = 'Cadastrar'
@@ -71,6 +78,40 @@ object frFolhaPagamento: TfrFolhaPagamento
       ParentFont = False
       TabOrder = 2
       OnClick = btCadastrarClick
+    end
+    object cbMes: TComboBox
+      Left = 400
+      Top = 53
+      Width = 97
+      Height = 21
+      Enabled = False
+      ItemHeight = 13
+      TabOrder = 3
+      Text = 'M'#234's'
+      Items.Strings = (
+        'Janeiro'
+        'Fevereiro'
+        'Mar'#231'o'
+        'Abril'
+        'Maio'
+        'Junho'
+        'Julho'
+        'Agosto'
+        'Setembro'
+        'Outubro'
+        'Novembro'
+        'Dezembro')
+    end
+    object seAno: TSpinEdit
+      Left = 504
+      Top = 53
+      Width = 49
+      Height = 22
+      Enabled = False
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 4
+      Value = 0
     end
   end
   object gbProventos: TGroupBox
@@ -162,13 +203,13 @@ object frFolhaPagamento: TfrFolhaPagamento
   object gbDescontos: TGroupBox
     Left = 232
     Top = 96
-    Width = 321
+    Width = 337
     Height = 129
     Caption = 'Descontos'
     TabOrder = 2
     object lbINSS: TLabel
-      Left = 48
-      Top = 24
+      Left = 49
+      Top = 26
       Width = 28
       Height = 21
       AutoSize = False
@@ -176,8 +217,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbIRRF: TLabel
-      Left = 48
-      Top = 48
+      Left = 49
+      Top = 51
       Width = 28
       Height = 21
       AutoSize = False
@@ -185,8 +226,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbValeTransp: TLabel
-      Left = 13
-      Top = 72
+      Left = 17
+      Top = 76
       Width = 63
       Height = 21
       AutoSize = False
@@ -195,7 +236,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbTotalDescontos: TLabel
       Left = 49
-      Top = 96
+      Top = 101
       Width = 27
       Height = 21
       AutoSize = False
@@ -203,8 +244,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object edINSS: TEdit
-      Left = 88
-      Top = 24
+      Left = 89
+      Top = 26
       Width = 121
       Height = 21
       Enabled = False
@@ -212,8 +253,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edIRRF: TEdit
-      Left = 88
-      Top = 48
+      Left = 89
+      Top = 51
       Width = 121
       Height = 21
       Enabled = False
@@ -221,8 +262,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edValeTransp: TEdit
-      Left = 88
-      Top = 72
+      Left = 89
+      Top = 76
       Width = 121
       Height = 21
       Enabled = False
@@ -230,8 +271,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edTotaisDescontos: TEdit
-      Left = 88
-      Top = 96
+      Left = 89
+      Top = 101
       Width = 121
       Height = 21
       Enabled = False
@@ -242,91 +283,99 @@ object frFolhaPagamento: TfrFolhaPagamento
   object gbResultado: TGroupBox
     Left = 8
     Top = 232
-    Width = 545
-    Height = 105
+    Width = 561
+    Height = 81
     Caption = 'Resultado'
     TabOrder = 3
-    object lbTotalPvResultados: TLabel
-      Left = 36
+    object Panel3: TPanel
+      Left = 40
       Top = 24
-      Width = 78
-      Height = 21
-      AutoSize = False
-      Caption = 'Total Proventos:'
-      Layout = tlCenter
-    end
-    object lbSalarioLiquido: TLabel
-      Left = 24
-      Top = 48
-      Width = 90
-      Height = 21
-      AutoSize = False
-      Caption = 'Sal'#225'rio L'#237'quido:'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-      Layout = tlCenter
-    end
-    object lbTotalDsResultado: TLabel
-      Left = 288
-      Top = 24
-      Width = 81
-      Height = 21
-      AutoSize = False
-      Caption = 'Total Descontos:'
-      Layout = tlCenter
-    end
-    object edTotalPVResultado: TEdit
-      Left = 120
-      Top = 24
-      Width = 121
-      Height = 21
-      Enabled = False
+      Width = 473
+      Height = 49
+      BevelOuter = bvNone
       TabOrder = 0
-      Text = 'R$ 0,00'
-    end
-    object edSalarioLiquido: TEdit
-      Left = 120
-      Top = 48
-      Width = 377
-      Height = 21
-      Enabled = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -12
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-      TabOrder = 1
-      Text = 'R$ 0,00'
-    end
-    object edTotalDsResultado: TEdit
-      Left = 376
-      Top = 24
-      Width = 121
-      Height = 21
-      Enabled = False
-      TabOrder = 2
-      Text = 'R$ 0,00'
+      object lbSalarioLiquido: TLabel
+        Left = 0
+        Top = 28
+        Width = 90
+        Height = 21
+        AutoSize = False
+        Caption = 'Sal'#225'rio L'#237'quido:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Layout = tlCenter
+      end
+      object lbTotalDsResultado: TLabel
+        Left = 264
+        Top = 0
+        Width = 81
+        Height = 21
+        AutoSize = False
+        Caption = 'Total Descontos:'
+        Layout = tlCenter
+      end
+      object lbTotalPvResultados: TLabel
+        Left = 4
+        Top = 0
+        Width = 78
+        Height = 21
+        AutoSize = False
+        Caption = 'Total Proventos:'
+        Layout = tlCenter
+      end
+      object edTotalDsResultado: TEdit
+        Left = 352
+        Top = 0
+        Width = 121
+        Height = 21
+        Enabled = False
+        TabOrder = 0
+        Text = 'R$ 0,00'
+      end
+      object edSalarioLiquido: TEdit
+        Left = 96
+        Top = 28
+        Width = 377
+        Height = 21
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 1
+        Text = 'R$ 0,00'
+      end
+      object edTotalPVResultado: TEdit
+        Left = 88
+        Top = 0
+        Width = 121
+        Height = 21
+        Enabled = False
+        TabOrder = 2
+        Text = 'R$ 0,00'
+      end
     end
   end
   object folhaGrid: TDBGrid
-    Left = 0
-    Top = 376
+    Left = 8
+    Top = 352
     Width = 561
-    Height = 201
+    Height = 225
     Align = alCustom
-    DataSource = dsFolhaPagamento
+    DataSource = dsFolha
     TabOrder = 4
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
     TitleFont.Name = 'MS Sans Serif'
     TitleFont.Style = []
-    OnCellClick = folhaGridCellClick
+    OnTitleClick = folhaGridTitleClick
     Columns = <
       item
         Expanded = False
@@ -336,9 +385,15 @@ object frFolhaPagamento: TfrFolhaPagamento
       end
       item
         Expanded = False
+        FieldName = 'bdCODFUNCIONARIO'
+        Title.Caption = 'Cod. Funcion'#225'rio'
+        Visible = True
+      end
+      item
+        Expanded = False
         FieldName = 'bdNOMEFUNCIONARIO'
         Title.Caption = 'Funcion'#225'rio'
-        Width = 142
+        Width = 112
         Visible = True
       end
       item
@@ -346,6 +401,18 @@ object frFolhaPagamento: TfrFolhaPagamento
         FieldName = 'bdCARGO'
         Title.Caption = 'Cargo'
         Width = 83
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdMESCOMPETENCIA'
+        Title.Caption = 'M'#234's'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdANOCOMPETENCIA'
+        Title.Caption = 'Ano'
         Visible = True
       end
       item
@@ -407,7 +474,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     Left = 596
     Top = 69
     Width = 441
-    Height = 217
+    Height = 228
     Enabled = False
     TabOrder = 5
     object lbCadastroFucionario: TLabel
@@ -468,7 +535,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Top = 48
       Width = 81
       Height = 21
-      MaxLength = 3
+      MaxLength = 6
       TabOrder = 0
     end
     object edNomeCadastro: TEdit
@@ -534,7 +601,7 @@ object frFolhaPagamento: TfrFolhaPagamento
   end
   object Panel1: TPanel
     Left = 141
-    Top = 344
+    Top = 320
     Width = 281
     Height = 25
     BevelOuter = bvNone
@@ -589,6 +656,14 @@ object frFolhaPagamento: TfrFolhaPagamento
       OnClick = btLimparClick
     end
   end
+  object DBNavigator1: TDBNavigator
+    Left = 464
+    Top = 320
+    Width = 104
+    Height = 25
+    VisibleButtons = [nbPrior, nbNext]
+    TabOrder = 7
+  end
   object cdsFuncionarios: TClientDataSet
     Active = True
     Aggregates = <>
@@ -626,8 +701,8 @@ object frFolhaPagamento: TfrFolhaPagamento
     IndexFieldNames = 'bdCODFUNCIONARIO'
     Params = <>
     StoreDefs = True
-    Left = 560
-    Top = 304
+    Left = 576
+    Top = 368
     Data = {
       A80000009619E0BD010000001800000005000000000003000000A80010626443
       4F4446554E43494F4E4152494F04000100000000000662644E4F4D4501004900
@@ -656,8 +731,8 @@ object frFolhaPagamento: TfrFolhaPagamento
   end
   object dsFuncionarios: TDataSource
     DataSet = cdsFuncionarios
-    Left = 600
-    Top = 304
+    Left = 608
+    Top = 368
   end
   object cdsFolhaPagamento: TClientDataSet
     Active = True
@@ -668,18 +743,27 @@ object frFolhaPagamento: TfrFolhaPagamento
         DataType = ftInteger
       end
       item
+        Name = 'bdMESCOMPETENCIA'
+        DataType = ftString
+        Size = 15
+      end
+      item
+        Name = 'bdANOCOMPETENCIA'
+        DataType = ftInteger
+      end
+      item
         Name = 'bdCODFUNCIONARIO'
         DataType = ftInteger
       end
       item
         Name = 'bdCARGO'
         DataType = ftString
-        Size = 30
+        Size = 50
       end
       item
         Name = 'bdNOMEFUNCIONARIO'
         DataType = ftString
-        Size = 150
+        Size = 100
       end
       item
         Name = 'bdSALARIOBASE'
@@ -719,47 +803,57 @@ object frFolhaPagamento: TfrFolhaPagamento
       end>
     IndexDefs = <
       item
-        Name = 'iCODFOLHA'
+        Name = 'iFolha'
         Fields = 'bdCODFOLHA'
         Options = [ixPrimary, ixUnique]
       end>
-    IndexName = 'iCODFOLHA'
-    PacketRecords = 0
+    IndexName = 'iFolha'
     Params = <>
     StoreDefs = True
-    Left = 560
-    Top = 272
+    AfterScroll = cdsFolhaPagamentoAfterScroll
+    Left = 576
+    Top = 336
     Data = {
-      020200009619E0BD01000000180000000D00000000000300000002020A626443
-      4F44464F4C48410400010000000000106264434F4446554E43494F4E4152494F
-      0400010000000000076264434152474F01004900000001000557494454480200
-      02001E001162644E4F4D4546554E43494F4E4152494F01004900000001000557
-      494454480200020096000D626453414C4152494F424153450800040000000100
-      07535542545950450200490006004D6F6E6579000D6264484F52415345585452
-      4153080004000000010007535542545950450200490006004D6F6E6579000F62
-      644F5554524F5356414C4F524553080004000000010007535542545950450200
-      490006004D6F6E657900066264494E5353080004000000010007535542545950
-      450200490006004D6F6E65790006626449525246080004000000010007535542
-      545950450200490006004D6F6E65790010626456414C455452414E53504F5254
-      45080004000000010007535542545950450200490006004D6F6E657900106264
-      544F54414C50524F56454E544F53080004000000010007535542545950450200
-      490006004D6F6E657900106264544F54414C444553434F4E544F530800040000
-      00010007535542545950450200490006004D6F6E65790010626453414C415249
-      4F4C49515549444F080004000000010007535542545950450200490006004D6F
-      6E6579000000}
+      400200009619E0BD01000000180000000F00000000000300000040020A626443
+      4F44464F4C484104000100000000001062644D4553434F4D504554454E434941
+      0100490000000100055749445448020002000F00106264414E4F434F4D504554
+      454E4349410400010000000000106264434F4446554E43494F4E4152494F0400
+      010000000000076264434152474F010049000000010005574944544802000200
+      32001162644E4F4D4546554E43494F4E4152494F010049000000010005574944
+      54480200020064000D626453414C4152494F4241534508000400000001000753
+      5542545950450200490006004D6F6E6579000D6264484F524153455854524153
+      080004000000010007535542545950450200490006004D6F6E6579000F62644F
+      5554524F5356414C4F5245530800040000000100075355425459504502004900
+      06004D6F6E657900066264494E53530800040000000100075355425459504502
+      00490006004D6F6E657900066264495252460800040000000100075355425459
+      50450200490006004D6F6E65790010626456414C455452414E53504F52544508
+      0004000000010007535542545950450200490006004D6F6E657900106264544F
+      54414C50524F56454E544F530800040000000100075355425459504502004900
+      06004D6F6E657900106264544F54414C444553434F4E544F5308000400000001
+      0007535542545950450200490006004D6F6E65790010626453414C4152494F4C
+      49515549444F080004000000010007535542545950450200490006004D6F6E65
+      79000000}
     object cdsFolhaPagamentobdCODFOLHA: TIntegerField
       FieldName = 'bdCODFOLHA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+    end
+    object cdsFolhaPagamentobdMESCOMPETENCIA: TStringField
+      FieldName = 'bdMESCOMPETENCIA'
+      Size = 15
+    end
+    object cdsFolhaPagamentobdANOCOMPETENCIA: TIntegerField
+      FieldName = 'bdANOCOMPETENCIA'
     end
     object cdsFolhaPagamentobdCODFUNCIONARIO: TIntegerField
       FieldName = 'bdCODFUNCIONARIO'
     end
     object cdsFolhaPagamentobdCARGO: TStringField
       FieldName = 'bdCARGO'
-      Size = 30
+      Size = 50
     end
     object cdsFolhaPagamentobdNOMEFUNCIONARIO: TStringField
       FieldName = 'bdNOMEFUNCIONARIO'
-      Size = 150
+      Size = 100
     end
     object cdsFolhaPagamentobdSALARIOBASE: TCurrencyField
       FieldName = 'bdSALARIOBASE'
@@ -789,9 +883,9 @@ object frFolhaPagamento: TfrFolhaPagamento
       FieldName = 'bdSALARIOLIQUIDO'
     end
   end
-  object dsFolhaPagamento: TDataSource
+  object dsFolha: TDataSource
     DataSet = cdsFolhaPagamento
-    Left = 596
-    Top = 269
+    Left = 608
+    Top = 336
   end
 end
