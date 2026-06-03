@@ -252,35 +252,30 @@ begin
       Result:= False;
       ShowMessage('Preenchar o campo Código para poder Salvar!');
       edCodFuncionario.SetFocus;
-      Exit;
     end
   else if (edNomeCadastro.Text = '') then
     begin
       Result:= False;
       ShowMessage('Preenchar o campo Nome para poder Salvar!');
       edNomeCadastro.SetFocus;
-      Exit;
     end
   else if (cbCargo.ItemIndex = -1) then
     begin
       Result:= False;
       ShowMessage('Preenchar o campo Cargo para poder Salvar!');
       cbCargo.SetFocus;
-      Exit;
     end
   else if (edEndereco.Text = '') then
     begin
       Result:= False;
       ShowMessage('Preenchar o campo "Endereço" para poder Salvar!');
       edEndereco.SetFocus;
-      Exit;
     end
   else if (edTelefone.Text = '') then
     begin
       Result:= False;
       ShowMessage('Preenchar o campo "Telefone" para poder Salvar!');
       edTelefone.SetFocus;
-      Exit;
     end;
 
 end;
