@@ -1,9 +1,10 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 199
-  Top = 119
-  Width = 639
-  Height = 605
+  Left = 520
+  Top = 13
+  BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
+  ClientHeight = 596
+  ClientWidth = 579
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -393,7 +394,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Expanded = False
         FieldName = 'bdNOMEFUNCIONARIO'
         Title.Caption = 'Funcion'#225'rio'
-        Width = 112
+        Width = 82
         Visible = True
       end
       item
@@ -407,6 +408,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Expanded = False
         FieldName = 'bdMESCOMPETENCIA'
         Title.Caption = 'M'#234's'
+        Width = 78
         Visible = True
       end
       item
@@ -655,14 +657,6 @@ object frFolhaPagamento: TfrFolhaPagamento
       TabOrder = 2
       OnClick = btLimparClick
     end
-  end
-  object DBNavigator1: TDBNavigator
-    Left = 464
-    Top = 320
-    Width = 104
-    Height = 25
-    VisibleButtons = [nbPrior, nbNext]
-    TabOrder = 7
   end
   object cdsFuncionarios: TClientDataSet
     Active = True

@@ -68,7 +68,6 @@ type
     edTotaisProventos: TEdit;
     Panel1: TPanel;
     Panel2: TPanel;
-    DBNavigator1: TDBNavigator;
     lbCompetencia: TLabel;
     cbMes: TComboBox;
     Panel3: TPanel;
@@ -110,7 +109,7 @@ type
 
   private
     { private variable declarations }
-    // Serï¿½ armazenado aqui o ID do Funcionario em foco, setado no ComboBox
+    // Serão armazenado aqui o ID do Funcionario em foco, setado no ComboBox
     wCodFuncionarioEmFoco:Integer;
     wCodFolhaEmFoco: Integer;
     wCodigoFolha: Integer;
@@ -129,7 +128,6 @@ type
 
     wAnoAtual: Word;
 
-    wCarregandoDados: Boolean;
     wCamposHabilitados: Boolean;
 
     { function and procedure declarations }
@@ -163,6 +161,7 @@ uses Math;
 
 procedure TfrFolhaPagamento.btCadastrarClick(Sender: TObject);
 begin
+  // Função: Habilita e trás o modal para fazer o cadastro do funcionário
   pnCadastroUsuario.Enabled := True;
   pnCadastroUsuario.Left := 60;
 end;
@@ -171,15 +170,17 @@ procedure TfrFolhaPagamento.btFecharClick(Sender: TObject);
 var
   wCount: Integer;
 begin
-  //Essa funï¿½ï¿½o abre e fecha o popup de cadastro do usuario, alï¿½m de alimentar os
-  //Itens do combobox
+  {
+    Essa função abre e fecha o popup de cadastro do usuario, além de alimentar os
+    Itens do combobox
+  }
   pnCadastroUsuario.Left := 640;
   pnCadastroUsuario.Enabled := False;
 
-  // Limpa o ComboBox para nï¿½o duplicar os itens
+  // Limpa o ComboBox para não duplicar os itens
   cbNomeFuncionario.Clear;
 
-  // Recarrega os funcionï¿½rios do banco
+  // Recarrega os funcionários do banco
   wCount := 0;
   cdsFuncionarios.First;
   while not cdsFuncionarios.Eof do
@@ -189,9 +190,9 @@ begin
     cdsFuncionarios.Next;
   end;
 
-  // Seleciona o funcionï¿½rio de volta usando a variï¿½vel global 'wIdFuncionarioEmFoco'
+  // Seleciona o funcionário de volta usando a variável global 'wIdFuncionarioEmFoco'
   cbNomeFuncionario.ItemIndex := cbNomeFuncionario.Items.IndexOfObject(TObject(wCodFuncionarioEmFoco));
-  
+
   if cbNomeFuncionario.ItemIndex <> -1 then
     cbNomeFuncionarioSelect(cbNomeFuncionario) // Restaura e recalcula tudo
   else
@@ -202,8 +203,17 @@ end;
 
 
 procedure TfrFolhaPagamento.btSalvarCadastroClick(Sender: TObject);
+var
+  wCodFuncionarioTemp: Integer;
 begin
-  //Essa funï¿½ï¿½o ao clicar em salvar, o usuï¿½rio ï¿½ salvo no BD de funcionï¿½rios;
+  if not TryStrToInt(edCodFuncionario.Text, wCodFuncionarioTemp) then
+    begin
+      ShowMessage('Por favor, digite um valor de Código válido.');
+      edCodFuncionario.SetFocus;
+      Exit;
+    end;
+
+  //Essa função ao clicar em salvar, o usuário é salvo no BD de Funcionarios
   if not fEstaCamposPreenchidos then
     begin
       Exit;
@@ -211,8 +221,7 @@ begin
 
   if fVerificaSeExiste('bdCODFUNCIONARIO', edCodFuncionario.Text) then
     begin
-      ShowMessage('Jï¿½ existe um funcionario com esse cï¿½digo'
-                                            + sLineBreak +
+      ShowMessage('Já existe um funcionário com esse código' + sLineBreak +
                   'Tente Outro!'
                   );
       edCodFuncionario.Clear;
@@ -234,13 +243,13 @@ end;
 
 function TfrFolhaPagamento.fEstaCamposPreenchidos:Boolean;
 begin
-  // Essa funï¿½ï¿½o verifica se todos os campos do cadastro de usuï¿½rio estï¿½o completos
+  // Essa função verifica se todos os campos do cadastro de usuário estiver completos
   // Caso sim ele retorna true, caso nï¿½o, false;
   Result:= True;
   if edCodFuncionario.Text = '' then
     begin
       Result:= False;
-      ShowMessage('Preenchar o campo Cï¿½digo para poder Salvar!');
+      ShowMessage('Preenchar o campo Código para poder Salvar!');
       edCodFuncionario.SetFocus;
       Exit;
     end
@@ -261,14 +270,14 @@ begin
   else if (edEndereco.Text = '') then
     begin
       Result:= False;
-      ShowMessage('Preenchar o campo "Endereï¿½o" para poder Salvar!');
+      ShowMessage('Preenchar o campo "Endereço" para poder Salvar!');
       edEndereco.SetFocus;
       Exit;
     end
   else if (edTelefone.Text = '') then
     begin
       Result:= False;
-      ShowMessage('Preenchar o campo Telefone para poder Salvar!');
+      ShowMessage('Preenchar o campo "Telefone" para poder Salvar!');
       edTelefone.SetFocus;
       Exit;
     end;
@@ -277,7 +286,7 @@ end;
 
 function TfrFolhaPagamento.fVerificaCargoEscolhido: String;
 begin
-  //Essa funÃ§Ã£o verifica e retorna o cargo escolhido no CB
+  //Essa função verifica e retorna o cargo escolhido no CB
   if (cbCargo.ItemIndex <> -1) then
     Result := cbCargo.Items[cbCargo.ItemIndex]
   else
@@ -286,14 +295,14 @@ end;
 
 function TfrFolhaPagamento.fVerificaSeExiste(coluna:String; alvo: String): Boolean;
 begin
-  //Essa funï¿½ï¿½o verifica se o funcionï¿½rio existe;
+  //Essa função verifica se o funcionário existe;
   cdsFuncionarios.IndexFieldNames := coluna;
   Result := cdsFuncionarios.FindKey([alvo]);
 end;
 
 procedure TfrFolhaPagamento.pLimparCamposCadastroFuncionarios;
 begin
-  //Essa funï¿½ï¿½o limpa os campos de cadastro de funcionï¿½rio
+  //Essa função limpa os campos de cadastro de funcionï¿½rio
   edCodFuncionario.Text := '';
   edNomeCadastro.Text   := '';
   cbCargo.ItemIndex     := -1;
@@ -369,6 +378,9 @@ end;
 
 procedure TfrFolhaPagamento.pHabilitarCampos;
 begin
+    {
+      Função: Habilitar os campos de cadastro de nova folha.
+    }
     wCamposHabilitados     := True;
     //Habilita os campos De Proventos
     if (cbNomeFuncionario.ItemIndex = -1) then
@@ -406,9 +418,6 @@ end;
 
 procedure TfrFolhaPagamento.edOutrosClick(Sender: TObject);
 begin
-    {
-
-    }
     pLimparEditClick(Self.edOutros);
 end;
 
@@ -416,7 +425,7 @@ end;
 function TfrFolhaPagamento.fCalcularTotalProventos;
 begin
   {
-    Funï¿½ï¿½o: Calcular proventos
+    Função: Calcular proventos
   }
   wValorTotalPv:= wSalarioBase + wValorHorasExtras + wValorOutros;
   edTotaisProventos.Text := FormatCurr('#,##0.00',wValorTotalPv);
@@ -472,7 +481,7 @@ begin
   {
     Função: Salvar o calculo no banco de dados;
   }
-  // Se o Salario for = 0, ou o mÃªs nÃ£o foi selecionado nÃ£o roda, Ã© necessÃ¡riorio ter um valor como salario base e mÃªs;
+  // Se o Salario for = 0, ou o mês nÃo foi selecionado, o programa não roda, é necessário ter um valor como salario base e mês para osalvar e calcular;
     if (wSalarioBase = 0) then
       begin
         edSalarioBase.SetFocus;
@@ -535,7 +544,7 @@ var
   wMaxID: Integer;
 begin
   {
-    Funï¿½ï¿½o: Gerar um cï¿½digo que nï¿½o se repita, ele procura o maior valor de ID, ao encontrar ele incrementa e retorna ;
+    Função: Gerar um código que não se repita, ele procura o maior valor de ID, ao encontrar ele incrementa e retorna ;
   }
   wMaxID := 0;
   cdsFolhaPagamento.DisableControls;
@@ -557,7 +566,7 @@ end;
 procedure TfrFolhaPagamento.btLimparClick(Sender: TObject);
 begin
   {
-    Funï¿½ï¿½o: Botï¿½o de limpar campos.
+    Função: Botãoo de limpar campos.
   }
   // Limpa os campos
   cbNomeFuncionario.ItemIndex := -1;
@@ -567,7 +576,7 @@ end;
 procedure TfrFolhaPagamento.pLimparCampos;
 begin
   {
-    Funï¿½ï¿½o: Limpa os campos de calculo de folha;
+    Função: Limpa os campos de calculo de folha;
   }
   edCargoFuncionario.Text:= '';
   edSalarioBase.Text := FormatCurr('#,##0.00', 0);
@@ -588,8 +597,7 @@ end;
 procedure TfrFolhaPagamento.pCarregarCargoFuncionario;
 begin
   {
-    Funï¿½ï¿½o: ï¿½ chamado ao evento de seleï¿½ï¿½o, e completa o campo edCargoFuncionario
-    com o cargo do funcionario em foco;
+    Função: Ao selecionar o campo, o campo cargo é adicionado;
   }
   cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
   if cdsFuncionarios.FindKey([wCodFuncionarioEmFoco]) then
@@ -601,10 +609,10 @@ end;
 procedure TfrFolhaPagamento.pCarregarFolhaExistente;
 begin
   {
-  Funï¿½ï¿½o: Verifica se existe alguma folha com o cod do funcionario selecionado
-  Caso sim, ele preenche os campos, para uma possivel ediï¿½ï¿½o.
+  Função: Verifica se existe alguma folha com o cod do funcionario selecionado
+  Caso sim, ele preenche os campos com os dados da determinada folha.
   }
-  // Define o ï¿½ndice de busca para o cï¿½digo do funcionï¿½rio
+  // Define o indice de busca para o código do funcionário, junto com mes e ano da compentêncio;
   cdsFolhaPagamento.IndexFieldNames := 'bdCODFUNCIONARIO;bdMESCOMPETENCIA;bdANOCOMPETENCIA';
   if cdsFolhaPagamento.FindKey([wCodFuncionarioEmFoco, cbMes.Items[cbMes.ItemIndex], seAno.Value]) then
     begin
@@ -631,8 +639,8 @@ end;
 
 function TfrFolhaPagamento.fCalculaValorINSS: Currency;
 begin
-  //Funï¿½ï¿½o: Calcula o valor do INSS
-  //DescontoINSS = (Base de Cï¿½lculo * Alï¿½quota) / 100 - Parcela a Deduzir
+  //Função: Calcula o valor do INSS
+  //DescontoINSS = (Base de Calcuo * Alíquota) / 100 - Parcela a Deduzir
   if wValorTotalPv <=  1621 then
      begin
         Result:= ((wValorTotalPv * 7.5) / 100) - 0;
@@ -653,7 +661,7 @@ begin
       Result:= ((wValorTotalPv * 14) / 100) - 198.49;
       Exit;
     end;
-  // Valores maior que o Teto de 8475.55, o valor ï¿½ fixo 996.17
+  // Valores maior que o Teto de 8475.55, o valor é fixo de R$ 996.17
   Result:= 996.17;
 end;
 
@@ -661,8 +669,8 @@ function TfrFolhaPagamento.fCalculaValorIRRF: Currency;
 var
   wBaseCalculo: Currency;
 begin
-  //Funï¿½ï¿½o: Calcula o valor do IRRF
-  //Imposto Retido = (Base de Cï¿½lculo do IRRF * Alï¿½quota) / 100 - Parcela a Deduzir
+  //Função: Calcula o valor do IRRF
+  //Imposto Retido = (Base de Calculo do IRRF * Alíquota) / 100 - Parcela a Deduzir
   wBaseCalculo:= wValorTotalPv - wValorINSS;
 
   if wBaseCalculo <=  2428.80 then
@@ -685,7 +693,7 @@ begin
       Result:= ((wBaseCalculo * 22.5) / 100) - 675.49;
       Exit;
     end;
-  // Valores maior que 4.664,68 a aliquota ï¿½ fixa em 27,5% e o valor a da Parcela a Deduzir ï¿½ R$ 908,73
+  // Valores maior que 4.664,68 a aliquota é fixa em 27,5% e o valor a da Parcela a Deduzir é R$ 908,73
   Result:= ((wBaseCalculo * 27.5) / 100) - 908.73;
 end;
 
@@ -701,7 +709,7 @@ begin
       // Sincroniza a interface visual (ComboBoxes e SpinEdit)
       cbNomeFuncionario.ItemIndex := cbNomeFuncionario.Items.IndexOfObject(TObject(wCodFuncionarioEmFoco));
       cbMes.ItemIndex             := cbMes.Items.IndexOf(cdsFolhaPagamentobdMESCOMPETENCIA.AsString);
-      seAno.OnChange := nil; 
+      seAno.OnChange := nil;
       seAno.Value                 := cdsFolhaPagamentobdANOCOMPETENCIA.AsInteger;
 
      // Atualiza o cargo e habilita os campos
