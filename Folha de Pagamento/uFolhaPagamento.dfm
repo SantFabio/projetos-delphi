@@ -1,10 +1,10 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 526
-  Top = 46
+  Left = 193
+  Top = 35
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
-  ClientHeight = 596
-  ClientWidth = 579
+  ClientHeight = 520
+  ClientWidth = 1045
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -50,7 +50,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     object cbNomeFuncionario: TComboBox
       Left = 48
       Top = 24
-      Width = 281
+      Width = 273
       Height = 21
       Enabled = False
       ItemHeight = 13
@@ -209,7 +209,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     Caption = 'Descontos'
     TabOrder = 2
     object lbINSS: TLabel
-      Left = 49
+      Left = 64
       Top = 26
       Width = 28
       Height = 21
@@ -218,7 +218,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbIRRF: TLabel
-      Left = 49
+      Left = 64
       Top = 51
       Width = 28
       Height = 21
@@ -227,16 +227,16 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbValeTransp: TLabel
-      Left = 17
+      Left = 14
       Top = 76
-      Width = 63
+      Width = 78
       Height = 21
       AutoSize = False
-      Caption = 'Vale Transp.:'
+      Caption = 'Vale Transporte:'
       Layout = tlCenter
     end
     object lbTotalDescontos: TLabel
-      Left = 49
+      Left = 65
       Top = 101
       Width = 27
       Height = 21
@@ -245,7 +245,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object edINSS: TEdit
-      Left = 89
+      Left = 105
       Top = 26
       Width = 121
       Height = 21
@@ -254,7 +254,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edIRRF: TEdit
-      Left = 89
+      Left = 105
       Top = 51
       Width = 121
       Height = 21
@@ -263,7 +263,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edValeTransp: TEdit
-      Left = 89
+      Left = 105
       Top = 76
       Width = 121
       Height = 21
@@ -272,7 +272,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edTotaisDescontos: TEdit
-      Left = 89
+      Left = 105
       Top = 101
       Width = 121
       Height = 21
@@ -289,18 +289,17 @@ object frFolhaPagamento: TfrFolhaPagamento
     Caption = 'Resultado'
     TabOrder = 3
     object Panel3: TPanel
-      Left = 40
+      Left = 24
       Top = 24
-      Width = 473
+      Width = 489
       Height = 49
       BevelOuter = bvNone
       TabOrder = 0
       object lbSalarioLiquido: TLabel
-        Left = 0
-        Top = 28
-        Width = 90
-        Height = 21
-        AutoSize = False
+        Left = 8
+        Top = 30
+        Width = 91
+        Height = 13
         Caption = 'Sal'#225'rio L'#237'quido:'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -311,7 +310,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Layout = tlCenter
       end
       object lbTotalDsResultado: TLabel
-        Left = 264
+        Left = 272
         Top = 0
         Width = 81
         Height = 21
@@ -320,7 +319,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Layout = tlCenter
       end
       object lbTotalPvResultados: TLabel
-        Left = 4
+        Left = 20
         Top = 0
         Width = 78
         Height = 21
@@ -329,7 +328,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Layout = tlCenter
       end
       object edTotalDsResultado: TEdit
-        Left = 352
+        Left = 368
         Top = 0
         Width = 121
         Height = 21
@@ -338,8 +337,8 @@ object frFolhaPagamento: TfrFolhaPagamento
         Text = 'R$ 0,00'
       end
       object edSalarioLiquido: TEdit
-        Left = 96
-        Top = 28
+        Left = 112
+        Top = 29
         Width = 377
         Height = 21
         Enabled = False
@@ -353,7 +352,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Text = 'R$ 0,00'
       end
       object edTotalPVResultado: TEdit
-        Left = 88
+        Left = 112
         Top = 0
         Width = 121
         Height = 21
@@ -369,7 +368,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     Width = 561
     Height = 225
     Align = alCustom
-    DataSource = dsFolha
+    DataSource = dsFuncionarios
     TabOrder = 4
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
@@ -382,6 +381,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Expanded = False
         FieldName = 'bdCODFOLHA'
         Title.Caption = 'Cod. da Folha'
+        Width = 72
         Visible = True
       end
       item
@@ -472,19 +472,92 @@ object frFolhaPagamento: TfrFolhaPagamento
         Visible = True
       end>
   end
+  object Panel1: TPanel
+    Left = 109
+    Top = 320
+    Width = 364
+    Height = 25
+    BevelOuter = bvNone
+    UseDockManager = False
+    TabOrder = 6
+    object btCalcular: TButton
+      Left = 1
+      Top = 0
+      Width = 89
+      Height = 25
+      Caption = 'Calcular'
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      OnClick = btCalcularClick
+    end
+    object btSalvar: TButton
+      Left = 96
+      Top = 0
+      Width = 89
+      Height = 25
+      Caption = 'Salvar'
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      OnClick = btSalvarClick
+    end
+    object btLimpar: TButton
+      Left = 192
+      Top = 0
+      Width = 89
+      Height = 25
+      Caption = 'Limpar'
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      OnClick = btLimparClick
+    end
+    object btDeletar: TButton
+      Left = 288
+      Top = 0
+      Width = 75
+      Height = 25
+      Caption = 'Deleta'
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      OnClick = btDeletarClick
+    end
+  end
   object pnCadastroUsuario: TPanel
     Left = 596
     Top = 69
     Width = 441
-    Height = 228
+    Height = 436
     Enabled = False
     TabOrder = 5
     object lbCadastroFucionario: TLabel
       Left = 152
       Top = 16
-      Width = 136
+      Width = 139
       Height = 13
-      Caption = 'Cadastro de funcionario'
+      Caption = 'Cadastro de Funcion'#225'rio'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -539,6 +612,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       MaxLength = 6
       TabOrder = 0
+      OnChange = edCodFuncionarioChange
     end
     object edNomeCadastro: TEdit
       Left = 72
@@ -600,62 +674,54 @@ object frFolhaPagamento: TfrFolhaPagamento
         OnClick = btSalvarCadastroClick
       end
     end
-  end
-  object Panel1: TPanel
-    Left = 141
-    Top = 320
-    Width = 281
-    Height = 25
-    BevelOuter = bvNone
-    UseDockManager = False
-    TabOrder = 6
-    object btCalcular: TButton
+    object DBGrid1: TDBGrid
       Left = 1
-      Top = 0
-      Width = 89
-      Height = 25
-      Caption = 'Calcular'
-      Enabled = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-      TabOrder = 0
-      OnClick = btCalcularClick
-    end
-    object btSalvar: TButton
-      Left = 96
-      Top = 0
-      Width = 89
-      Height = 25
-      Caption = 'Salvar'
-      Enabled = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-      TabOrder = 1
-      OnClick = btSalvarClick
-    end
-    object btLimpar: TButton
-      Left = 192
-      Top = 0
-      Width = 89
-      Height = 25
-      Caption = 'Limpar'
-      Enabled = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-      TabOrder = 2
-      OnClick = btLimparClick
+      Top = 216
+      Width = 439
+      Height = 219
+      Align = alBottom
+      DataSource = dsFuncionarios
+      TabOrder = 6
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'bdCODFUNCIONARIO'
+          Title.Caption = 'ID'
+          Width = 49
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdNOME'
+          Title.Caption = 'Nome'
+          Width = 117
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdCARGO'
+          Title.Caption = 'Cargo'
+          Width = 74
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdTELEFONE'
+          Title.Caption = 'Telefone'
+          Width = 78
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdENDERECO'
+          Title.Caption = 'Endere'#231'o'
+          Visible = True
+        end>
     end
   end
   object cdsFuncionarios: TClientDataSet
@@ -695,8 +761,9 @@ object frFolhaPagamento: TfrFolhaPagamento
     IndexFieldNames = 'bdCODFUNCIONARIO'
     Params = <>
     StoreDefs = True
+    AfterScroll = cdsFuncionariosAfterScroll
     Left = 576
-    Top = 368
+    Top = 40
     Data = {
       A80000009619E0BD010000001800000005000000000003000000A80010626443
       4F4446554E43494F4E4152494F04000100000000000662644E4F4D4501004900
@@ -726,7 +793,7 @@ object frFolhaPagamento: TfrFolhaPagamento
   object dsFuncionarios: TDataSource
     DataSet = cdsFuncionarios
     Left = 608
-    Top = 368
+    Top = 40
   end
   object cdsFolhaPagamento: TClientDataSet
     Active = True
@@ -806,7 +873,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     StoreDefs = True
     AfterScroll = cdsFolhaPagamentoAfterScroll
     Left = 576
-    Top = 336
+    Top = 8
     Data = {
       400200009619E0BD01000000180000000F00000000000300000040020A626443
       4F44464F4C484104000100000000001062644D4553434F4D504554454E434941
@@ -880,6 +947,6 @@ object frFolhaPagamento: TfrFolhaPagamento
   object dsFolha: TDataSource
     DataSet = cdsFolhaPagamento
     Left = 608
-    Top = 336
+    Top = 8
   end
 end
