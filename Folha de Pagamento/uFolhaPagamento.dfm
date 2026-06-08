@@ -1,10 +1,10 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 193
+  Left = 197
   Top = 35
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
-  ClientHeight = 520
-  ClientWidth = 1045
+  ClientHeight = 576
+  ClientWidth = 584
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -362,116 +362,6 @@ object frFolhaPagamento: TfrFolhaPagamento
       end
     end
   end
-  object folhaGrid: TDBGrid
-    Left = 8
-    Top = 352
-    Width = 561
-    Height = 225
-    Align = alCustom
-    DataSource = dsFuncionarios
-    TabOrder = 4
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'MS Sans Serif'
-    TitleFont.Style = []
-    OnTitleClick = folhaGridTitleClick
-    Columns = <
-      item
-        Expanded = False
-        FieldName = 'bdCODFOLHA'
-        Title.Caption = 'Cod. da Folha'
-        Width = 72
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdCODFUNCIONARIO'
-        Title.Caption = 'Cod. Funcion'#225'rio'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdNOMEFUNCIONARIO'
-        Title.Caption = 'Funcion'#225'rio'
-        Width = 82
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdCARGO'
-        Title.Caption = 'Cargo'
-        Width = 83
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdMESCOMPETENCIA'
-        Title.Caption = 'M'#234's'
-        Width = 78
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdANOCOMPETENCIA'
-        Title.Caption = 'Ano'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdSALARIOBASE'
-        Title.Caption = 'Sal'#225'rio Base'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdHORASEXTRAS'
-        Title.Caption = 'Hrs. Extras'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdOUTROSVALORES'
-        Title.Caption = 'Outros'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdINSS'
-        Title.Caption = 'INSS'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdIRRF'
-        Title.Caption = 'IRRF'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdVALETRANSPORTE'
-        Title.Caption = 'Vale Trans.'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdTOTALPROVENTOS'
-        Title.Caption = 'Total Prov.'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdTOTALDESCONTOS'
-        Title.Caption = 'Total Des.'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'bdSALARIOLIQUIDO'
-        Title.Caption = 'Sal'#225'rio L'#237'quido'
-        Visible = True
-      end>
-  end
   object Panel1: TPanel
     Left = 109
     Top = 320
@@ -479,7 +369,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     Height = 25
     BevelOuter = bvNone
     UseDockManager = False
-    TabOrder = 6
+    TabOrder = 5
     object btCalcular: TButton
       Left = 1
       Top = 0
@@ -551,7 +441,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     Width = 441
     Height = 436
     Enabled = False
-    TabOrder = 5
+    TabOrder = 4
     object lbCadastroFucionario: TLabel
       Left = 152
       Top = 16
@@ -651,7 +541,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     object Panel2: TPanel
       Left = 128
       Top = 168
-      Width = 185
+      Width = 281
       Height = 25
       BevelOuter = bvNone
       TabOrder = 3
@@ -723,6 +613,99 @@ object frFolhaPagamento: TfrFolhaPagamento
           Visible = True
         end>
     end
+  end
+  object grFolha: TDBGrid
+    Left = 0
+    Top = 352
+    Width = 577
+    Height = 225
+    DataSource = dsFolha
+    TabOrder = 6
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'bdCODFOLHA'
+        Title.Caption = 'Cod. Folha'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdCODFUNCIONARIO'
+        Title.Caption = 'Cod. Funcion'#225'rio'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdNOMEFUNCIONARIO'
+        Title.Caption = 'Nome do Funcion'#225'rio'
+        Width = 136
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdMESCOMPETENCIA'
+        Title.Caption = 'M'#234's'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdANOCOMPETENCIA'
+        Title.Caption = 'Ano'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdSALARIOBASE'
+        Title.Caption = 'Sal'#225'rio Base'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdHORASEXTRAS'
+        Title.Caption = 'Horas Extras'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdOUTROSVALORES'
+        Title.Caption = 'Outros Valores'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdTOTALPROVENTOS'
+        Title.Caption = 'Total Proventos'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdINSS'
+        Title.Caption = 'Valor INSS'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdIRRF'
+        Title.Caption = 'Valor IRRF'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdTOTALDESCONTOS'
+        Title.Caption = 'Total Descontos'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'bdSALARIOLIQUIDO'
+        Title.Caption = 'Sal'#225'rio Liqu'#237'do'
+        Visible = True
+      end>
   end
   object cdsFuncionarios: TClientDataSet
     Active = True
