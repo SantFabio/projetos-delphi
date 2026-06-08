@@ -562,17 +562,13 @@ begin
   }
   wMaxID := 0;
   cdsFolhaPagamento.DisableControls;
-  try
     cdsFolhaPagamento.First;
     while not cdsFolhaPagamento.Eof do
-      begin
-        if cdsFolhaPagamentobdCODFOLHA.AsInteger > wMaxID then
-          wMaxID := cdsFolhaPagamentobdCODFOLHA.AsInteger;
-        cdsFolhaPagamento.Next;
-      end;
-  finally
-    cdsFolhaPagamento.EnableControls;
-  end;
+        begin
+            if cdsFolhaPagamentobdCODFOLHA.AsInteger > wMaxID then
+            wMaxID := cdsFolhaPagamentobdCODFOLHA.AsInteger;
+            cdsFolhaPagamento.Next;
+        end;
   Result := wMaxID + 1;
 end;
 
@@ -615,9 +611,9 @@ begin
   }
   cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
   if cdsFuncionarios.FindKey([wCodFuncionarioEmFoco]) then
-    edCargoFuncionario.Text := cdsFuncionariosbdCARGO.AsString
+      edCargoFuncionario.Text := cdsFuncionariosbdCARGO.AsString
   else
-    edCargoFuncionario.Text := '';
+      edCargoFuncionario.Text := '';
 end;
 
 procedure TfrFolhaPagamento.pCarregarFolhaExistente;
@@ -629,54 +625,53 @@ begin
   // Define o indice de busca para o código do funcionário, junto com mes e ano da compentêncio;
   cdsFolhaPagamento.IndexFieldNames := 'bdCODFUNCIONARIO;bdMESCOMPETENCIA;bdANOCOMPETENCIA';
   if cdsFolhaPagamento.FindKey([wCodFuncionarioEmFoco, cbMes.Items[cbMes.ItemIndex], seAno.Value]) then
-    begin
-      wCodFolhaEmFoco := cdsFolhaPagamentobdCODFOLHA.AsInteger;
+      begin
+          wCodFolhaEmFoco := cdsFolhaPagamentobdCODFOLHA.AsInteger;
 
-      wSalarioBase      := cdsFolhaPagamentobdSALARIOBASE.AsCurrency;
-      wValorHorasExtras := cdsFolhaPagamentobdHORASEXTRAS.AsCurrency;
-      wValorOutros      := cdsFolhaPagamentobdOUTROSVALORES.AsCurrency;
+          wSalarioBase      := cdsFolhaPagamentobdSALARIOBASE.AsCurrency;
+          wValorHorasExtras := cdsFolhaPagamentobdHORASEXTRAS.AsCurrency;
+          wValorOutros      := cdsFolhaPagamentobdOUTROSVALORES.AsCurrency;
 
-      edSalarioBase.Text := FormatCurr('#,##0.00', wSalarioBase);
-      edHorasExtras.Text := FormatCurr('#,##0.00', wValorHorasExtras);
-      edOutros.Text      := FormatCurr('#,##0.00', wValorOutros);
+          edSalarioBase.Text := FormatCurr('#,##0.00', wSalarioBase);
+          edHorasExtras.Text := FormatCurr('#,##0.00', wValorHorasExtras);
+          edOutros.Text      := FormatCurr('#,##0.00', wValorOutros);
 
-      fCalcularTotalProventos;
-      fCalcularTotalDescontos;
-      btCalcularClick(Nil);
-    end
+          fCalcularTotalProventos;
+          fCalcularTotalDescontos;
+          btCalcularClick(Nil);
+      end
   else
-    begin
-      pLimparCampos;
-      wCodFolhaEmFoco := 0;
-    end;
+      begin
+          pLimparCampos;
+          wCodFolhaEmFoco := 0;
+      end;
 end;
 
 function TfrFolhaPagamento.fCalculaValorINSS: Currency;
 begin
-  //Função: Calcula o valor do INSS
-  //DescontoINSS = (Base de Calcuo * Alíquota) / 100 - Parcela a Deduzir
-  if wValorTotalPv <=  1621 then
-     begin
-        Result:= ((wValorTotalPv * 7.5) / 100) - 0;
-        Exit;
-     end
-  else if (wValorTotalPv >  1621) and (wValorTotalPv <=  2902.84) then
-    begin
-      Result:= ((wValorTotalPv * 9) / 100) - 24.35;
-      Exit;
-    end
-  else if (wValorTotalPv >  2902.84) and (wValorTotalPv <=  4354.27) then
-    begin
-      Result:= ((wValorTotalPv * 12) / 100) - 111.40;
-      Exit;
-    end
-  else if (wValorTotalPv >  4354.27) and (wValorTotalPv <=  8475.55) then
-    begin
-      Result:= ((wValorTotalPv * 14) / 100) - 198.49;
-      Exit;
-    end;
-  // Valores maior que o Teto de 8475.55, o valor é fixo de R$ 996.17
-  Result:= 996.17;
+  //Funcao: Calcula o valor do INSS
+  //DescontoINSS = (Base de Calcuo * Aliquota) / 100 - Parcela a Deduzir
+    if wValorTotalPv <=  1621 then
+        begin
+            Result:= ((wValorTotalPv * 7.5) / 100) - 0;
+        end
+    else if (wValorTotalPv >  1621) and (wValorTotalPv <=  2902.84) then
+        begin
+            Result:= ((wValorTotalPv * 9) / 100) - 24.32;
+        end
+    else if (wValorTotalPv >  2902.84) and (wValorTotalPv <=  4354.27) then
+        begin
+            Result:= ((wValorTotalPv * 12) / 100) - 111.40;
+        end
+    else if (wValorTotalPv >  4354.27) and (wValorTotalPv <=  8475.55) then
+        begin
+            Result:= ((wValorTotalPv * 14) / 100) - 198.49;
+        end
+    else
+        begin
+        // Valores maior que o Teto de 8475.55, o valor e fixo de R$ 988.09
+            Result:= 988.09;
+        end;
 end;
 
 function TfrFolhaPagamento.fCalculaValorIRRF: Currency;
@@ -688,25 +683,21 @@ begin
   wBaseCalculo:= wValorTotalPv - wValorINSS;
 
   if wBaseCalculo <=  2428.80 then
-     begin
-        Result:= 0;
-        Exit;
-     end
+      begin
+          Result:= 0;
+      end
   else if (wBaseCalculo >  2428.80) and (wBaseCalculo <=  2826.65) then
-    begin
-      Result:= ((wBaseCalculo * 7.5) / 100) - 182.16;
-      Exit;
-    end
+      begin
+          Result:= ((wBaseCalculo * 7.5) / 100) - 182.16;
+      end
   else if (wBaseCalculo >  2826.65) and (wBaseCalculo <=  3751.05) then
-    begin
-      Result:= ((wBaseCalculo * 15) / 100) - 394.16;
-      Exit;
-    end
+      begin
+          Result:= ((wBaseCalculo * 15) / 100) - 394.16;
+      end
   else if (wBaseCalculo >  3751.05) and (wBaseCalculo <=  4664.68) then
-    begin
-      Result:= ((wBaseCalculo * 22.5) / 100) - 675.49;
-      Exit;
-    end;
+      begin
+          Result:= ((wBaseCalculo * 22.5) / 100) - 675.49;
+      end;
   // Valores maior que 4.664,68 a aliquota é fixa em 27,5% e o valor a da Parcela a Deduzir é R$ 908,73
   Result:= ((wBaseCalculo * 27.5) / 100) - 908.73;
 end;
@@ -720,32 +711,32 @@ begin
   para aquele registro.
   }
   if not cdsFolhaPagamento.IsEmpty then
-    begin
+      begin
         // Atualiza as variáveis de controle com o registro ativo
-      wCodFuncionarioEmFoco := cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger;
-      wCodFolhaEmFoco       := cdsFolhaPagamentobdCODFOLHA.AsInteger;
+          wCodFuncionarioEmFoco := cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger;
+          wCodFolhaEmFoco       := cdsFolhaPagamentobdCODFOLHA.AsInteger;
 
       // Sincroniza a interface visual (ComboBoxes e SpinEdit)
-      cbNomeFuncionario.ItemIndex := cbNomeFuncionario.Items.IndexOfObject(TObject(wCodFuncionarioEmFoco));
-      cbMes.ItemIndex             := cbMes.Items.IndexOf(cdsFolhaPagamentobdMESCOMPETENCIA.AsString);
-      seAno.OnChange := nil; //Forçando a execução com nil
-      seAno.Value                 := cdsFolhaPagamentobdANOCOMPETENCIA.AsInteger;
+          cbNomeFuncionario.ItemIndex := cbNomeFuncionario.Items.IndexOfObject(TObject(wCodFuncionarioEmFoco));
+          cbMes.ItemIndex             := cbMes.Items.IndexOf(cdsFolhaPagamentobdMESCOMPETENCIA.AsString);
+          seAno.OnChange := nil; //Forçando a execução com nil
+          seAno.Value                 := cdsFolhaPagamentobdANOCOMPETENCIA.AsInteger;
 
      // Atualiza o cargo e habilita os campos
-      pCarregarCargoFuncionario;
-      pHabilitarCampos;
+          pCarregarCargoFuncionario;
+          pHabilitarCampos;
 
       // Copia os valores do registro atual do ClientDataSet para a tela (SEM usar FindKey)
-      wSalarioBase          := cdsFolhaPagamentobdSALARIOBASE.AsCurrency;
-      wValorHorasExtras     := cdsFolhaPagamentobdHORASEXTRAS.AsCurrency;
-      wValorOutros          := cdsFolhaPagamentobdOUTROSVALORES.AsCurrency;
-      edSalarioBase.Text    := FormatCurr('#,##0.00', wSalarioBase);
-      edHorasExtras.Text    := FormatCurr('#,##0.00', wValorHorasExtras);
-      edOutros.Text         := FormatCurr('#,##0.00', wValorOutros);
-      fCalcularTotalProventos;
-      fCalcularTotalDescontos;
-      btCalcularClick(Nil);
-  end;
+          wSalarioBase          := cdsFolhaPagamentobdSALARIOBASE.AsCurrency;
+          wValorHorasExtras     := cdsFolhaPagamentobdHORASEXTRAS.AsCurrency;
+          wValorOutros          := cdsFolhaPagamentobdOUTROSVALORES.AsCurrency;
+          edSalarioBase.Text    := FormatCurr('#,##0.00', wSalarioBase);
+          edHorasExtras.Text    := FormatCurr('#,##0.00', wValorHorasExtras);
+          edOutros.Text         := FormatCurr('#,##0.00', wValorOutros);
+          fCalcularTotalProventos;
+          fCalcularTotalDescontos;
+          btCalcularClick(Nil);
+    end;
 end;
 
 procedure TfrFolhaPagamento.folhaGridTitleClick(Column: TColumn);
@@ -755,13 +746,13 @@ begin
     para decrescente (usando o índice) }
     // Para ordenar de forma decrescente no ClientDataSet, adicionamos ':D' ao nome do campo
   if cdsFolhaPagamento.IndexFieldNames = Column.FieldName then
-    begin
-      cdsFolhaPagamento.IndexFieldNames := Column.FieldName + ':D';
-    end
+      begin
+          cdsFolhaPagamento.IndexFieldNames := Column.FieldName + ':D';
+      end
   else
-    begin
-      cdsFolhaPagamento.IndexFieldNames := Column.FieldName;
-    end;
+      begin
+          cdsFolhaPagamento.IndexFieldNames := Column.FieldName;
+      end;
 end;
 
 
@@ -771,9 +762,9 @@ var
 begin
   Result := True;
   if not TryStrToCurr(PREdit.Text, wValorMonetarioTemp) then
-    begin
-       Result:= False;
-    end;
+      begin
+          Result:= False;
+      end;
 end;
 
 end.
