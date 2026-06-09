@@ -94,6 +94,7 @@ type
     meTelefone: TMaskEdit;
     btLimparCamposFuncionarios: TBitBtn;
     grFuncionario: TDBGrid;
+    btNovoCargo: TButton;
     procedure btCadastrarClick(Sender: TObject);
     procedure btFecharClick(Sender: TObject);
 
@@ -118,6 +119,9 @@ type
     procedure btLimparCamposFuncionariosClick(Sender: TObject);
     procedure cbNomeFuncionarioChange(Sender: TObject);
     procedure btSalvarClick(Sender: TObject);
+    procedure edSalarioBaseKeyPress(Sender: TObject; var Key: Char);
+    procedure edHorasExtrasKeyPress(Sender: TObject; var Key: Char);
+    procedure edOutrosKeyPress(Sender: TObject; var Key: Char);
 
   private
     { private variable declarations }
@@ -142,6 +146,7 @@ type
 
     wCamposHabilitados: Boolean;
     {Variaveis para criação de funcionários}
+    wTelefoneLimpo: String;
     wCarregandoFuncionario: Boolean;
 
     { function and procedure declarations }
@@ -152,15 +157,15 @@ type
     function fGerarCodigoUnicoFuncionario: Integer;
     function fCalculaValorINSS: Currency;
     function fCalculaValorIRRF: Currency;
+    function fValidaCampoMonetario(prEdit: TEdit): Boolean;
+    function fValidaCamposFolha: Boolean;
+    function fLimparMascaraMonetaria(const prTexto: string): string;
     procedure pCarregarCargoFuncionario;
     procedure pCarregarFolhaExistente;
     procedure pLimparEditClick(prEdit: TEdit);
     procedure pLimparCamposCadastroFuncionarios;
     procedure pHabilitarCampos;
     procedure pLimparCampos;
-    function fValidaCampoMonetario(prEdit: TEdit): Boolean;
-    function fValidaCamposFolha: Boolean;
-    function fLimparMascaraMonetaria(const prTexto: string): string;
 
 
   public
@@ -220,63 +225,67 @@ end;
 
 function TfrFolhaPagamento.fEstaCamposPreenchidos:Boolean;
 var
-  wTelefoneLimpo: String;
   i: Integer;
 begin
   // Essa funï¿½ï¿½o verifica se todos os campos do cadastro de usuï¿½rio estiver completos
   // Caso sim ele retorna true, caso nï¿½o, false;
   Result:= True;
   if edCodFuncionario.Text = '' then
-      begin
-          Result:= False;
-          ShowMessage('Preencha o campo Código para poder salvar!');
-          edCodFuncionario.SetFocus;
-      end
+    begin
+      Result:= False;
+      ShowMessage('Preencha o campo Código para poder salvar!');
+      edCodFuncionario.SetFocus;
+    end
   else if (edNomeCadastro.Text = '') then
-      begin
-          Result:= False;
-          ShowMessage('Preencha o campo Nome para poder salvar!');
-          edNomeCadastro.SetFocus;
-      end
+    begin
+      Result:= False;
+      ShowMessage('Preencha o campo Nome para poder salvar!');
+      edNomeCadastro.SetFocus;
+    end
   else if (cbCargo.ItemIndex = -1) then
-      begin
-          Result:= False;
-          ShowMessage('Preencha o campo Cargo para poder salvar!');
-          cbCargo.SetFocus;
-      end
+    begin
+      Result:= False;
+      ShowMessage('Preencha o campo Cargo para poder salvar!');
+      cbCargo.SetFocus;
+    end
   else if (edEndereco.Text = '') then
-      begin
-          Result:= False;
-          ShowMessage('Preencha o campo Endereço para poder salvar!');
-          edEndereco.SetFocus;
-      end
+    begin
+      Result:= False;
+      ShowMessage('Preencha o campo Endereço para poder salvar!');
+      edEndereco.SetFocus;
+    end
   else
-      begin
-        // Remove a formatação da máscara e mantém apenas os números
-        wTelefoneLimpo := '';
+    begin
+      // Remove a formatação da máscara e mantém apenas os números
 
-        for i := 1 to Length(meTelefone.Text) do
-          begin
-              if meTelefone.Text[i] in ['0'..'9'] then
-                  wTelefoneLimpo := wTelefoneLimpo + meTelefone.Text[i];
-          end;
-
+      for i := 1 to Length(meTelefone.Text) do
+        begin
+          if meTelefone.Text[i] in ['0'..'9'] then
+            wTelefoneLimpo := wTelefoneLimpo + meTelefone.Text[i];
+        end;
           // Valida se está vazio ou com menos dígitos que o necessário (DDD + Número)
 
-        if Length(wTelefoneLimpo) < 10 then
-          begin
-            Result:= False;
-            ShowMessage('Preencha um Telefone válido com DDD!');
-            meTelefone.SetFocus;
-          end;
+      if Length(wTelefoneLimpo) < 10 then
+        begin
+          Result:= False;
+          ShowMessage('Preencha um Telefone válido com DDD!');
+          meTelefone.SetFocus;
+        end;
 
-      end;
+      if wTelefoneLimpo = '00000000000' then
+        begin
+          Result:= False;
+          ShowMessage('Preencha um Telefone válido com DDD!');
+          meTelefone.SetFocus;
+        end;
+
+    end;
 
 end;
 
 procedure TfrFolhaPagamento.pLimparCamposCadastroFuncionarios;
 begin
-  //Essa funï¿½ï¿½o limpa os campos de cadastro de funcionï¿½rio
+  //Essa função limpa os campos de cadastro de funcionï¿½rio
   edCodFuncionario.Text := IntToStr(fGerarCodigoUnicoFuncionario);
   edNomeCadastro.Text   := '';
   cbCargo.ItemIndex     := -1;
@@ -290,8 +299,10 @@ var
 begin
     // Essa funï¿½ï¿½o busca o o funcionario em foco e coloca o cargo dele no campo cargo
      wIndexFuncionario := cbNomeFuncionario.ItemIndex;
+
      if wIndexFuncionario = -1 then
         Exit;
+
      //Retira o cod do funcionario do Tobject do combobox, e adicionar em uma variavel
      wCodFuncionarioEmFoco := Integer(cbNomeFuncionario.Items.Objects[wIndexFuncionario]);
 
@@ -319,6 +330,7 @@ begin
   wValorTotalPv:= 0;
   wCodFolhaEmFoco:= 0;
   wCodigoFolha:= 0;
+  wTelefoneLimpo := '';
 
   //Adicionar o ano atual ao seAno
   DecodeDate(Date, wAnoAtual, wMesAtual, wDiaAtual);
@@ -332,10 +344,12 @@ end;
 
 procedure TfrFolhaPagamento.edSalarioBaseExit(Sender: TObject);
 begin
+
   if not fValidaCampoMonetario(edSalarioBase) then
-      begin
-          edSalarioBase.Text := '0';
-      end;
+    begin
+      edSalarioBase.Text := '0';
+    end;
+
   // Limpa os pontos antes de converter
   wSalarioBase              := StrToCurrDef(fLimparMascaraMonetaria(edSalarioBase.Text), 0);
   edSalarioBase.Text        := FormatCurr('#,##0.00', wSalarioBase);
@@ -384,9 +398,9 @@ begin
     wCamposHabilitados     := True;
     //Habilita os campos De Proventos
     if (cbNomeFuncionario.ItemIndex = -1) then
-        begin
-          wCamposHabilitados := False;
-        end;
+      begin
+        wCamposHabilitados := False;
+      end;
 
      edSalarioBase.Enabled := wCamposHabilitados;
      edHorasExtras.Enabled := wCamposHabilitados;
@@ -404,10 +418,12 @@ end;
 
 procedure TfrFolhaPagamento.pLimparEditClick(prEdit: TEdit);
 begin
+
   if (prEdit.Text = '0,00') then
       begin
         prEdit.Clear;
       end;
+
 end;
 
 procedure TfrFolhaPagamento.edHorasExtrasClick(Sender: TObject);
@@ -453,12 +469,12 @@ begin
   // Funï¿½ï¿½o: Botï¿½o de calcular e completar os calculos;
 
   if (edSalarioBase.Text <> '0,00') and (edSalarioBase.Text <> '') then
-      begin
-          edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalProventos);
-          edTotalDsResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalDescontos);
-          edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00', wValorTotalPv - wValorDescontosTotal);
-          btSalvar.Enabled  := True;
-      end;
+    begin
+      edTotalPVResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalProventos);
+      edTotalDsResultado.Text := FormatCurr('"R$ "#,##0.00',fCalcularTotalDescontos);
+      edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00', wValorTotalPv - wValorDescontosTotal);
+      btSalvar.Enabled  := True;
+    end;
 
 end;
 
@@ -703,6 +719,8 @@ begin
     begin
       Exit;
     end;
+
+
   cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
 
   cdsFuncionarios.AfterScroll := nil;
@@ -718,9 +736,9 @@ begin
       cdsFuncionariosbdCODFUNCIONARIO.AsInteger := StrToInt(edCodFuncionario.Text);
     end;
 
-  cdsFuncionariosbdNOME.AsString     := edNomeCadastro.Text;
+  cdsFuncionariosbdNOME.AsString     := Trim(edNomeCadastro.Text);
   cdsFuncionariosbdCARGO.AsString    := cbCargo.Items[cbCargo.ItemIndex];
-  cdsFuncionariosbdENDERECO.AsString := edEndereco.Text;
+  cdsFuncionariosbdENDERECO.AsString := Trim(edEndereco.Text);
   cdsFuncionariosbdTELEFONE.AsString := meTelefone.Text;
   cdsFuncionarios.Post;
 
@@ -732,10 +750,12 @@ end;
 procedure TfrFolhaPagamento.meTelefoneKeyPress(Sender: TObject;
   var Key: Char);
 begin
-  if not (Key in ['0'..'9', #8]) then
+
+  if not (Key in ['0'..'9', ',', '.', #8]) then
     begin
       Key := #0;
     end;
+    
 end;
 
 procedure TfrFolhaPagamento.edCodFuncionarioChange(Sender: TObject);
@@ -926,5 +946,39 @@ begin
   Result := StringReplace(prTexto, ThousandSeparator, '', [rfReplaceAll]);
   Result := Trim(Result);
 end;
+
+procedure TfrFolhaPagamento.edSalarioBaseKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+  if not (Key in ['0'..'9', #8]) then
+    begin
+      Key := #0;
+    end;
+
+end;
+
+procedure TfrFolhaPagamento.edHorasExtrasKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+  if not (Key in ['0'..'9', ',', '.', #8]) then
+    begin
+      Key := #0;
+    end;
+    
+end;
+
+procedure TfrFolhaPagamento.edOutrosKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+  if not (Key in ['0'..'9', ',', '.', #8]) then
+    begin
+      Key := #0;
+    end;
+    
+end;
+
 
 end.

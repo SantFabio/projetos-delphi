@@ -1,10 +1,10 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 529
-  Top = 118
+  Left = 175
+  Top = 78
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
-  ClientHeight = 688
-  ClientWidth = 1051
+  ClientHeight = 583
+  ClientWidth = 1045
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -169,6 +169,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
       OnClick = edSalarioBaseClick
       OnExit = edSalarioBaseExit
+      OnKeyPress = edSalarioBaseKeyPress
     end
     object edHorasExtras: TEdit
       Left = 88
@@ -180,6 +181,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
       OnClick = edHorasExtrasClick
       OnExit = edHorasExtrasExit
+      OnKeyPress = edHorasExtrasKeyPress
     end
     object edOutros: TEdit
       Left = 88
@@ -191,6 +193,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
       OnClick = edOutrosClick
       OnExit = edOutrosExit
+      OnKeyPress = edOutrosKeyPress
     end
     object edTotaisProventos: TEdit
       Left = 88
@@ -438,9 +441,10 @@ object frFolhaPagamento: TfrFolhaPagamento
   end
   object grFolha: TDBGrid
     Left = 0
-    Top = 352
-    Width = 577
-    Height = 225
+    Top = 357
+    Width = 1045
+    Height = 226
+    Align = alBottom
     DataSource = dsFolha
     TabOrder = 6
     TitleFont.Charset = DEFAULT_CHARSET
@@ -532,7 +536,7 @@ object frFolhaPagamento: TfrFolhaPagamento
   object pnCadastroUsuario: TPanel
     Left = 596
     Top = 69
-    Width = 441
+    Width = 413
     Height = 436
     Enabled = False
     TabOrder = 4
@@ -551,7 +555,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbCod: TLabel
       Left = 32
-      Top = 52
+      Top = 49
       Width = 36
       Height = 13
       Caption = 'C'#243'digo:'
@@ -559,7 +563,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbNomeUserCadastro: TLabel
       Left = 37
-      Top = 76
+      Top = 74
       Width = 31
       Height = 13
       Caption = 'Nome:'
@@ -567,7 +571,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbCargoCadastro: TLabel
       Left = 37
-      Top = 100
+      Top = 99
       Width = 31
       Height = 13
       Caption = 'Cargo:'
@@ -591,7 +595,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object edCodFuncionario: TEdit
       Left = 72
-      Top = 48
+      Top = 45
       Width = 81
       Height = 21
       Color = clMenu
@@ -602,14 +606,14 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object edNomeCadastro: TEdit
       Left = 72
-      Top = 72
-      Width = 345
+      Top = 70
+      Width = 281
       Height = 21
       TabOrder = 1
     end
     object cbCargo: TComboBox
       Left = 72
-      Top = 96
+      Top = 95
       Width = 129
       Height = 21
       ItemHeight = 13
@@ -623,12 +627,12 @@ object frFolhaPagamento: TfrFolhaPagamento
     object edEndereco: TEdit
       Left = 72
       Top = 120
-      Width = 345
+      Width = 281
       Height = 21
       TabOrder = 3
     end
     object Panel2: TPanel
-      Left = 80
+      Left = 72
       Top = 176
       Width = 281
       Height = 25
@@ -665,7 +669,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     object grFuncionario: TDBGrid
       Left = 1
       Top = 216
-      Width = 439
+      Width = 411
       Height = 219
       Align = alBottom
       DataSource = dsFuncionarios
@@ -722,6 +726,14 @@ object frFolhaPagamento: TfrFolhaPagamento
       TabOrder = 4
       Text = '(  )      -    '
       OnKeyPress = meTelefoneKeyPress
+    end
+    object btNovoCargo: TButton
+      Left = 277
+      Top = 93
+      Width = 75
+      Height = 24
+      Caption = 'Novo Cargo'
+      TabOrder = 7
     end
   end
   object cdsFuncionarios: TClientDataSet
