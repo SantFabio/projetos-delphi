@@ -1,10 +1,10 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 197
-  Top = 35
+  Left = 529
+  Top = 118
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
-  ClientHeight = 576
-  ClientWidth = 584
+  ClientHeight = 688
+  ClientWidth = 1051
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -42,7 +42,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbCompetencia: TLabel
       Left = 326
-      Top = 53
+      Top = 55
       Width = 65
       Height = 13
       Caption = 'Compet'#234'ncia:'
@@ -55,6 +55,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Enabled = False
       ItemHeight = 13
       TabOrder = 0
+      OnChange = cbNomeFuncionarioChange
       OnSelect = cbNomeFuncionarioSelect
     end
     object edCargoFuncionario: TEdit
@@ -63,10 +64,10 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 153
       Height = 21
       Enabled = False
-      TabOrder = 1
+      TabOrder = 2
     end
     object btCadastrar: TButton
-      Left = 32
+      Left = 48
       Top = 49
       Width = 89
       Height = 25
@@ -77,7 +78,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Font.Name = 'MS Sans Serif'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 1
       OnClick = btCadastrarClick
     end
     object cbMes: TComboBox
@@ -164,7 +165,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 121
       Height = 21
       Enabled = False
-      TabOrder = 1
+      TabOrder = 0
       Text = '0,00'
       OnClick = edSalarioBaseClick
       OnExit = edSalarioBaseExit
@@ -175,7 +176,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 121
       Height = 21
       Enabled = False
-      TabOrder = 2
+      TabOrder = 1
       Text = '0,00'
       OnClick = edHorasExtrasClick
       OnExit = edHorasExtrasExit
@@ -186,7 +187,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 121
       Height = 21
       Enabled = False
-      TabOrder = 3
+      TabOrder = 2
       Text = '0,00'
       OnClick = edOutrosClick
       OnExit = edOutrosExit
@@ -197,7 +198,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Width = 121
       Height = 21
       Enabled = False
-      TabOrder = 0
+      TabOrder = 3
       Text = '0,00'
     end
   end
@@ -333,7 +334,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Width = 121
         Height = 21
         Enabled = False
-        TabOrder = 0
+        TabOrder = 2
         Text = 'R$ 0,00'
       end
       object edSalarioLiquido: TEdit
@@ -357,7 +358,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         Width = 121
         Height = 21
         Enabled = False
-        TabOrder = 2
+        TabOrder = 0
         Text = 'R$ 0,00'
       end
     end
@@ -433,185 +434,6 @@ object frFolhaPagamento: TfrFolhaPagamento
       ParentFont = False
       TabOrder = 3
       OnClick = btDeletarClick
-    end
-  end
-  object pnCadastroUsuario: TPanel
-    Left = 596
-    Top = 69
-    Width = 441
-    Height = 436
-    Enabled = False
-    TabOrder = 4
-    object lbCadastroFucionario: TLabel
-      Left = 152
-      Top = 16
-      Width = 139
-      Height = 13
-      Caption = 'Cadastro de Funcion'#225'rio'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-    end
-    object lbCod: TLabel
-      Left = 32
-      Top = 48
-      Width = 36
-      Height = 13
-      Caption = 'C'#243'digo:'
-      Layout = tlCenter
-    end
-    object lbNomeUserCadastro: TLabel
-      Left = 37
-      Top = 72
-      Width = 31
-      Height = 13
-      Caption = 'Nome:'
-      Layout = tlCenter
-    end
-    object lbCargoCadastro: TLabel
-      Left = 37
-      Top = 96
-      Width = 31
-      Height = 13
-      Caption = 'Cargo:'
-      Layout = tlCenter
-    end
-    object lbEndereco: TLabel
-      Left = 19
-      Top = 120
-      Width = 49
-      Height = 13
-      Caption = 'Endere'#231'o:'
-      Layout = tlCenter
-    end
-    object lbTelefone: TLabel
-      Left = 23
-      Top = 144
-      Width = 45
-      Height = 13
-      Caption = 'Telefone:'
-      Layout = tlCenter
-    end
-    object edCodFuncionario: TEdit
-      Left = 72
-      Top = 48
-      Width = 81
-      Height = 21
-      MaxLength = 6
-      TabOrder = 0
-      OnChange = edCodFuncionarioChange
-    end
-    object edNomeCadastro: TEdit
-      Left = 72
-      Top = 72
-      Width = 345
-      Height = 21
-      TabOrder = 1
-    end
-    object cbCargo: TComboBox
-      Left = 72
-      Top = 96
-      Width = 129
-      Height = 21
-      ItemHeight = 13
-      TabOrder = 2
-      Items.Strings = (
-        'Desenvolvedor'
-        'QA'
-        'Analista de Neg'#243'cios'
-        'Scrum Master')
-    end
-    object edEndereco: TEdit
-      Left = 72
-      Top = 120
-      Width = 345
-      Height = 21
-      TabOrder = 4
-    end
-    object edTelefone: TEdit
-      Left = 72
-      Top = 144
-      Width = 121
-      Height = 21
-      TabOrder = 5
-    end
-    object Panel2: TPanel
-      Left = 128
-      Top = 168
-      Width = 281
-      Height = 25
-      BevelOuter = bvNone
-      TabOrder = 3
-      object btFechar: TButton
-        Left = -2
-        Top = 0
-        Width = 91
-        Height = 25
-        Caption = 'Fechar'
-        TabOrder = 1
-        OnClick = btFecharClick
-      end
-      object btSalvarCadastro: TButton
-        Left = 96
-        Top = 0
-        Width = 89
-        Height = 25
-        Caption = 'Salvar'
-        TabOrder = 0
-        OnClick = btSalvarCadastroClick
-      end
-    end
-    object DBGrid1: TDBGrid
-      Left = 1
-      Top = 216
-      Width = 439
-      Height = 219
-      Align = alBottom
-      DataSource = dsFuncionarios
-      TabOrder = 6
-      TitleFont.Charset = DEFAULT_CHARSET
-      TitleFont.Color = clWindowText
-      TitleFont.Height = -11
-      TitleFont.Name = 'MS Sans Serif'
-      TitleFont.Style = []
-      Columns = <
-        item
-          Expanded = False
-          FieldName = 'bdCODFUNCIONARIO'
-          Title.Caption = 'ID'
-          Width = 49
-          Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'bdNOME'
-          Title.Caption = 'Nome'
-          Width = 117
-          Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'bdCARGO'
-          Title.Caption = 'Cargo'
-          Width = 74
-          Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'bdTELEFONE'
-          Title.Caption = 'Telefone'
-          Width = 78
-          Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'bdENDERECO'
-          Title.Caption = 'Endere'#231'o'
-          Visible = True
-        end>
     end
   end
   object grFolha: TDBGrid
@@ -706,6 +528,201 @@ object frFolhaPagamento: TfrFolhaPagamento
         Title.Caption = 'Sal'#225'rio Liqu'#237'do'
         Visible = True
       end>
+  end
+  object pnCadastroUsuario: TPanel
+    Left = 596
+    Top = 69
+    Width = 441
+    Height = 436
+    Enabled = False
+    TabOrder = 4
+    object lbCadastroFucionario: TLabel
+      Left = 152
+      Top = 16
+      Width = 139
+      Height = 13
+      Caption = 'Cadastro de Funcion'#225'rio'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lbCod: TLabel
+      Left = 32
+      Top = 52
+      Width = 36
+      Height = 13
+      Caption = 'C'#243'digo:'
+      Layout = tlCenter
+    end
+    object lbNomeUserCadastro: TLabel
+      Left = 37
+      Top = 76
+      Width = 31
+      Height = 13
+      Caption = 'Nome:'
+      Layout = tlCenter
+    end
+    object lbCargoCadastro: TLabel
+      Left = 37
+      Top = 100
+      Width = 31
+      Height = 13
+      Caption = 'Cargo:'
+      Layout = tlCenter
+    end
+    object lbEndereco: TLabel
+      Left = 19
+      Top = 124
+      Width = 49
+      Height = 13
+      Caption = 'Endere'#231'o:'
+      Layout = tlCenter
+    end
+    object lbTelefone: TLabel
+      Left = 23
+      Top = 148
+      Width = 45
+      Height = 13
+      Caption = 'Telefone:'
+      Layout = tlCenter
+    end
+    object edCodFuncionario: TEdit
+      Left = 72
+      Top = 48
+      Width = 81
+      Height = 21
+      Color = clMenu
+      Enabled = False
+      MaxLength = 6
+      TabOrder = 0
+      OnChange = edCodFuncionarioChange
+    end
+    object edNomeCadastro: TEdit
+      Left = 72
+      Top = 72
+      Width = 345
+      Height = 21
+      TabOrder = 1
+    end
+    object cbCargo: TComboBox
+      Left = 72
+      Top = 96
+      Width = 129
+      Height = 21
+      ItemHeight = 13
+      TabOrder = 2
+      Items.Strings = (
+        'Desenvolvedor'
+        'QA'
+        'Analista de Neg'#243'cios'
+        'Scrum Master')
+    end
+    object edEndereco: TEdit
+      Left = 72
+      Top = 120
+      Width = 345
+      Height = 21
+      TabOrder = 3
+    end
+    object Panel2: TPanel
+      Left = 80
+      Top = 176
+      Width = 281
+      Height = 25
+      BevelOuter = bvNone
+      TabOrder = 5
+      object btFechar: TButton
+        Left = -2
+        Top = 0
+        Width = 91
+        Height = 25
+        Caption = 'Fechar'
+        TabOrder = 0
+        OnClick = btFecharClick
+      end
+      object btSalvarCadastro: TButton
+        Left = 96
+        Top = 0
+        Width = 89
+        Height = 25
+        Caption = 'Salvar'
+        TabOrder = 1
+        OnClick = btSalvarCadastroClick
+      end
+      object btLimparCamposFuncionarios: TBitBtn
+        Left = 192
+        Top = 0
+        Width = 89
+        Height = 25
+        Caption = 'Limpar'
+        TabOrder = 2
+        OnClick = btLimparCamposFuncionariosClick
+      end
+    end
+    object grFuncionario: TDBGrid
+      Left = 1
+      Top = 216
+      Width = 439
+      Height = 219
+      Align = alBottom
+      DataSource = dsFuncionarios
+      TabOrder = 6
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      OnCellClick = DBGrid1CellClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'bdCODFUNCIONARIO'
+          Title.Caption = 'ID'
+          Width = 49
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdNOME'
+          Title.Caption = 'Nome'
+          Width = 117
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdCARGO'
+          Title.Caption = 'Cargo'
+          Width = 74
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdTELEFONE'
+          Title.Caption = 'Telefone'
+          Width = 78
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bdENDERECO'
+          Title.Caption = 'Endere'#231'o'
+          Visible = True
+        end>
+    end
+    object meTelefone: TMaskEdit
+      Left = 72
+      Top = 144
+      Width = 107
+      Height = 21
+      EditMask = '!\(99\) 99999-9999;1;_'
+      MaxLength = 15
+      TabOrder = 4
+      Text = '(  )      -    '
+      OnKeyPress = meTelefoneKeyPress
+    end
   end
   object cdsFuncionarios: TClientDataSet
     Active = True
