@@ -97,6 +97,7 @@ type
     btNovoCargo: TButton;
     btExcluirCargo: TButton;
     btExcluirFuncionario: TButton;
+    btConsultar: TButton;
     procedure btCadastrarClick(Sender: TObject);
     procedure btFecharClick(Sender: TObject);
 
@@ -127,10 +128,11 @@ type
     procedure btNovoCargoClick(Sender: TObject);
     procedure btExcluirFuncionarioClick(Sender: TObject);
     procedure btExcluirCargoClick(Sender: TObject);
+    procedure btConsultarClick(Sender: TObject);
 
   private
     { private variable declarations }
-    // Serï¿½o armazenado aqui o ID do Funcionario em foco, setado no ComboBox
+    // Será armazenado aqui o ID do Funcionario em foco, setado no ComboBox
     wCodFuncionarioEmFoco:Integer;
     wCodFolhaEmFoco: Integer;
     wCodigoFolha: Integer;
@@ -232,7 +234,7 @@ end;
 
 function TfrFolhaPagamento.fEstaCamposPreenchidos:Boolean;
 begin
-  // Essa funï¿½ï¿½o verifica se todos os campos do cadastro de usuï¿½rio estiver completos
+  // Essa função verifica se todos os campos do cadastro de usuï¿½rio estiver completos
   // Caso sim ele retorna true, caso nï¿½o, false;
   Result:= True;
   if edCodFuncionario.Text = '' then
@@ -537,6 +539,7 @@ begin
   edSalarioLiquido.Text := FormatCurr('"R$ "#,##0.00', 0);
   cbMes.ItemIndex := -1;
   seAno.Value := wAnoAtual;
+  cbNomeFuncionario.SetFocus;
 end;
 
 procedure TfrFolhaPagamento.pCarregarCargoFuncionario;
@@ -643,7 +646,7 @@ procedure TfrFolhaPagamento.cdsFolhaPagamentoAfterScroll(
   DataSet: TDataSet);
 begin
   {
-    Quando o usuï¿½rio clica em uma linha (row) de um DBGrid, o componente
+    Quando o usuário clica em uma linha (row) de um DBGrid, o componente
     visual precisa "avisar" o CDS para mover o seu cursor interno
     para aquele registro.
   }
@@ -757,7 +760,7 @@ procedure TfrFolhaPagamento.meTelefoneKeyPress(Sender: TObject;
   var Key: Char);
 begin
 
-  if not (Key in ['0'..'9', ',', '.', #8]) then
+  if not (Key in ['0'..'9', #8]) then
     begin
       Key := #0;
     end;
@@ -843,7 +846,7 @@ end;
 procedure TfrFolhaPagamento.btSalvarClick(Sender: TObject);
 var
   wNovoCodigoFolha: Integer;
-  wS: String;
+  // wS: String;
 begin
   if not fValidaCamposFolha then
     Exit;
@@ -1074,6 +1077,32 @@ begin
       cbCargo.Items.Delete(cbCargo.ItemIndex);
       cbCargo.ItemIndex := -1
     end;
+
+end;
+
+procedure TfrFolhaPagamento.btConsultarClick(Sender: TObject);
+var
+  wCdsClone: TClientDataSet;
+  wMessagem: String;
+begin
+
+  if cdsFolhaPagamento.IsEmpty then
+     Exit;
+
+  Try
+    wCdsClone.CloneCursor(cdsFolhaPagamento, True, False);
+    wCdsClone.First;
+
+    while wCdsClone.Eof do
+      begin
+        wMessagem := wMessagem + wCdsClone + sLineBreak;
+        wCdsClone.Next;
+      end;
+
+    ShowMessage(wMessagem);
+
+  finally
+     wCdsClone.Close;
 
 end;
 

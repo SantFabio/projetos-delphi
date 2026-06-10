@@ -1,10 +1,10 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 398
-  Top = 199
+  Left = 224
+  Top = 43
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
-  ClientHeight = 583
-  ClientWidth = 1045
+  ClientHeight = 584
+  ClientWidth = 1034
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -367,9 +367,9 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
   end
   object Panel1: TPanel
-    Left = 109
+    Left = 85
     Top = 320
-    Width = 364
+    Width = 436
     Height = 25
     BevelOuter = bvNone
     UseDockManager = False
@@ -391,7 +391,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       OnClick = btCalcularClick
     end
     object btSalvar: TButton
-      Left = 96
+      Left = 93
       Top = 0
       Width = 89
       Height = 25
@@ -407,9 +407,9 @@ object frFolhaPagamento: TfrFolhaPagamento
       OnClick = btSalvarClick
     end
     object btLimpar: TButton
-      Left = 192
+      Left = 184
       Top = 0
-      Width = 89
+      Width = 90
       Height = 25
       Caption = 'Limpar'
       Enabled = False
@@ -423,7 +423,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       OnClick = btLimparClick
     end
     object btDeletar: TButton
-      Left = 288
+      Left = 277
       Top = 0
       Width = 75
       Height = 25
@@ -438,12 +438,27 @@ object frFolhaPagamento: TfrFolhaPagamento
       TabOrder = 3
       OnClick = btDeletarClick
     end
+    object btConsultar: TButton
+      Left = 356
+      Top = 0
+      Width = 75
+      Height = 25
+      Caption = 'Consultar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+      OnClick = btConsultarClick
+    end
   end
   object grFolha: TDBGrid
     Left = 0
-    Top = 357
-    Width = 1045
-    Height = 226
+    Top = 353
+    Width = 1034
+    Height = 231
     Align = alBottom
     DataSource = dsFolha
     TabOrder = 6
