@@ -95,6 +95,8 @@ type
     btLimparCamposFuncionarios: TBitBtn;
     grFuncionario: TDBGrid;
     btNovoCargo: TButton;
+    btExcluirCargo: TButton;
+    btExcluirFuncionario: TButton;
     procedure btCadastrarClick(Sender: TObject);
     procedure btFecharClick(Sender: TObject);
 
@@ -122,6 +124,9 @@ type
     procedure edSalarioBaseKeyPress(Sender: TObject; var Key: Char);
     procedure edHorasExtrasKeyPress(Sender: TObject; var Key: Char);
     procedure edOutrosKeyPress(Sender: TObject; var Key: Char);
+    procedure btNovoCargoClick(Sender: TObject);
+    procedure btExcluirFuncionarioClick(Sender: TObject);
+    procedure btExcluirCargoClick(Sender: TObject);
 
   private
     { private variable declarations }
@@ -160,6 +165,8 @@ type
     function fValidaCampoMonetario(prEdit: TEdit): Boolean;
     function fValidaCamposFolha: Boolean;
     function fLimparMascaraMonetaria(const prTexto: string): string;
+    function fRetirarMascaraTelefone(prTelefone: String): String;
+    function fNormalizarEspacos(prTexto: String): String;
     procedure pCarregarCargoFuncionario;
     procedure pCarregarFolhaExistente;
     procedure pLimparEditClick(prEdit: TEdit);
@@ -184,6 +191,7 @@ uses Math;
 procedure TfrFolhaPagamento.btCadastrarClick(Sender: TObject);
 begin
   // Funï¿½ï¿½o: Habilita e trï¿½s o modal para fazer o cadastro do funcionï¿½rio
+  pLimparCamposCadastroFuncionarios;
   edCodFuncionario.Text := IntToStr(fGerarCodigoUnicoFuncionario);
   pnCadastroUsuario.Enabled := True;
   pnCadastroUsuario.Left := 60;
@@ -218,14 +226,13 @@ begin
   else
      edCargoFuncionario.Clear;
 
-  // >>> ADICIONE ESTA LINHA AQUI NO FINAL <<<
-  cbNomeFuncionario.Enabled := not cdsFuncionarios.IsEmpty; 
+  cbNomeFuncionario.Enabled := not cdsFuncionarios.IsEmpty;
+
+
 end;
 
 
 function TfrFolhaPagamento.fEstaCamposPreenchidos:Boolean;
-var
-  i: Integer;
 begin
   // Essa funï¿½ï¿½o verifica se todos os campos do cadastro de usuï¿½rio estiver completos
   // Caso sim ele retorna true, caso nï¿½o, false;
@@ -256,16 +263,8 @@ begin
     end
   else
     begin
-      // Remove a formatação da máscara e mantém apenas os números
 
-      for i := 1 to Length(meTelefone.Text) do
-        begin
-          if meTelefone.Text[i] in ['0'..'9'] then
-            wTelefoneLimpo := wTelefoneLimpo + meTelefone.Text[i];
-        end;
-          // Valida se está vazio ou com menos dígitos que o necessário (DDD + Número)
-
-      if Length(wTelefoneLimpo) < 10 then
+      if Length(fRetirarMascaraTelefone(meTelefone.Text)) < 10 then
         begin
           Result:= False;
           ShowMessage('Preencha um Telefone válido com DDD!');
@@ -736,15 +735,25 @@ begin
       cdsFuncionariosbdCODFUNCIONARIO.AsInteger := StrToInt(edCodFuncionario.Text);
     end;
 
-  cdsFuncionariosbdNOME.AsString     := Trim(edNomeCadastro.Text);
+  cdsFuncionariosbdNOME.AsString     := fNormalizarEspacos(edNomeCadastro.Text);
   cdsFuncionariosbdCARGO.AsString    := cbCargo.Items[cbCargo.ItemIndex];
-  cdsFuncionariosbdENDERECO.AsString := Trim(edEndereco.Text);
-  cdsFuncionariosbdTELEFONE.AsString := meTelefone.Text;
+  cdsFuncionariosbdENDERECO.AsString := fNormalizarEspacos(edEndereco.Text);
+  cdsFuncionariosbdTELEFONE.AsString := fRetirarMascaraTelefone(meTelefone.Text);
   cdsFuncionarios.Post;
 
   cdsFuncionarios.AfterScroll := cdsFuncionariosAfterScroll;
 
   pLimparCamposCadastroFuncionarios;
+end;
+
+function TfrFolhaPagamento.fRetirarMascaraTelefone(prTelefone: String): String;
+begin
+  Result := prTelefone;
+
+  Result := StringReplace(Result, '(', '', [rfReplaceAll]);
+  Result := StringReplace(Result, ')', '', [rfReplaceAll]);
+  Result := StringReplace(Result, ' ', '', [rfReplaceAll]);
+  Result := StringReplace(Result, '-', '', [rfReplaceAll]);
 end;
 
 procedure TfrFolhaPagamento.meTelefoneKeyPress(Sender: TObject;
@@ -760,7 +769,7 @@ end;
 
 procedure TfrFolhaPagamento.edCodFuncionarioChange(Sender: TObject);
 begin
-
+  btExcluirFuncionario.Enabled := False;
   if wCarregandoFuncionario then
     begin
       Exit;
@@ -774,6 +783,14 @@ begin
       cbCargo.ItemIndex   := cbCargo.Items.IndexOf(cdsFuncionariosbdCARGO.AsString);
       edEndereco.Text     := cdsFuncionariosbdENDERECO.AsString;
       meTelefone.Text     := cdsFuncionariosbdTELEFONE.AsString;
+    end
+  else
+    begin
+      // Caso o código não seja encontrado, limpa os campos de dados
+      edNomeCadastro.Text := '';
+      cbCargo.ItemIndex   := -1;
+      edEndereco.Text     := '';
+      meTelefone.Text     := '';
     end;
 
 end;
@@ -788,6 +805,7 @@ begin
 
   if cdsFuncionarios.IsEmpty then
     begin
+      btExcluirFuncionario.Enabled := False;
       Exit;
     end;
 
@@ -799,6 +817,8 @@ begin
     cbCargo.ItemIndex     := cbCargo.Items.IndexOf(cdsFuncionariosbdCARGO.AsString);
     edEndereco.Text       := cdsFuncionariosbdENDERECO.AsString;
     meTelefone.Text       := cdsFuncionariosbdTELEFONE.AsString;
+
+    btExcluirFuncionario.Enabled := True;
   finally
     wCarregandoFuncionario := False;
   end;
@@ -947,6 +967,16 @@ begin
   Result := Trim(Result);
 end;
 
+function TfrFolhaPagamento.fNormalizarEspacos(prTexto: String): String;
+begin
+  Result := Trim(prTexto);
+
+  while Pos('  ', Result) > 0 do
+    begin
+      Result := StringReplace(Result, '  ', ' ', [rfReplaceAll]);
+    end;
+end;
+
 procedure TfrFolhaPagamento.edSalarioBaseKeyPress(Sender: TObject;
   var Key: Char);
 begin
@@ -980,5 +1010,60 @@ begin
     
 end;
 
+
+procedure TfrFolhaPagamento.btNovoCargoClick(Sender: TObject);
+var
+  i: Integer;
+  wExiste: Boolean;
+begin
+
+  if cbCargo.Text = '' then
+    begin
+      cbCargo.SetFocus;
+    end
+  else
+    begin
+      wExiste := false;
+
+      for i := 0 to cbCargo.Items.Count do
+        begin
+
+          if LowerCase(cbCargo.Items[i]) = LowerCase(fNormalizarEspacos(cbCargo.Text)) then
+            begin
+             wExiste := true;
+            end;
+        end;
+
+      if wExiste then
+        begin
+          ShowMessage('Esse cargo já existe');
+          cbCargo.ItemIndex := -1;
+          Exit;
+        end;
+
+      cbCargo.Items.Add(fNormalizarEspacos(cbCargo.Text));
+      cbCargo.Text := '';
+      ShowMessage('Novo cargo Adicionado');
+
+    end;
+    
+end;
+
+procedure TfrFolhaPagamento.btExcluirFuncionarioClick(Sender: TObject);
+begin
+  cdsFuncionarios.Delete;
+  pLimparCamposCadastroFuncionarios;
+end;
+
+procedure TfrFolhaPagamento.btExcluirCargoClick(Sender: TObject);
+begin
+
+  if cbCargo.ItemIndex <> -1 then
+    begin
+      cbCargo.Items.Delete(cbCargo.ItemIndex);
+      cbCargo.ItemIndex := -1
+    end;
+
+end;
 
 end.

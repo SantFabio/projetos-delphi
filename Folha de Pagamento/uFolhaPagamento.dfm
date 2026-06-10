@@ -1,6 +1,6 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 175
-  Top = 78
+  Left = 570
+  Top = 207
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
   ClientHeight = 583
@@ -113,7 +113,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       MaxValue = 0
       MinValue = 0
       TabOrder = 4
-      Value = 0
+      Value = 2026
     end
   end
   object gbProventos: TGroupBox
@@ -607,14 +607,14 @@ object frFolhaPagamento: TfrFolhaPagamento
     object edNomeCadastro: TEdit
       Left = 72
       Top = 70
-      Width = 281
+      Width = 297
       Height = 21
       TabOrder = 1
     end
     object cbCargo: TComboBox
       Left = 72
       Top = 95
-      Width = 129
+      Width = 145
       Height = 21
       ItemHeight = 13
       TabOrder = 2
@@ -627,14 +627,14 @@ object frFolhaPagamento: TfrFolhaPagamento
     object edEndereco: TEdit
       Left = 72
       Top = 120
-      Width = 281
+      Width = 297
       Height = 21
       TabOrder = 3
     end
     object Panel2: TPanel
-      Left = 72
+      Left = 16
       Top = 176
-      Width = 281
+      Width = 377
       Height = 25
       BevelOuter = bvNone
       TabOrder = 5
@@ -648,7 +648,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         OnClick = btFecharClick
       end
       object btSalvarCadastro: TButton
-        Left = 96
+        Left = 94
         Top = 0
         Width = 89
         Height = 25
@@ -657,13 +657,23 @@ object frFolhaPagamento: TfrFolhaPagamento
         OnClick = btSalvarCadastroClick
       end
       object btLimparCamposFuncionarios: TBitBtn
-        Left = 192
+        Left = 191
         Top = 0
         Width = 89
         Height = 25
         Caption = 'Limpar'
         TabOrder = 2
         OnClick = btLimparCamposFuncionariosClick
+      end
+      object btExcluirFuncionario: TButton
+        Left = 288
+        Top = 0
+        Width = 89
+        Height = 25
+        Caption = 'Excluir'
+        Enabled = False
+        TabOrder = 3
+        OnClick = btExcluirFuncionarioClick
       end
     end
     object grFuncionario: TDBGrid
@@ -719,21 +729,30 @@ object frFolhaPagamento: TfrFolhaPagamento
     object meTelefone: TMaskEdit
       Left = 72
       Top = 144
-      Width = 107
+      Width = 99
       Height = 21
-      EditMask = '!\(99\) 99999-9999;1;_'
+      EditMask = '!\(99\) 99999-9999;0;_'
       MaxLength = 15
       TabOrder = 4
-      Text = '(  )      -    '
       OnKeyPress = meTelefoneKeyPress
     end
     object btNovoCargo: TButton
-      Left = 277
+      Left = 304
       Top = 93
-      Width = 75
+      Width = 64
       Height = 24
       Caption = 'Novo Cargo'
       TabOrder = 7
+      OnClick = btNovoCargoClick
+    end
+    object btExcluirCargo: TButton
+      Left = 224
+      Top = 93
+      Width = 74
+      Height = 24
+      Caption = 'Excluir Cargo'
+      TabOrder = 8
+      OnClick = btExcluirCargoClick
     end
   end
   object cdsFuncionarios: TClientDataSet
