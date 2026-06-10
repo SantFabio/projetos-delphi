@@ -151,7 +151,6 @@ type
 
     wCamposHabilitados: Boolean;
     {Variaveis para criaÁ„o de funcion·rios}
-    wTelefoneLimpo: String;
     wCarregandoFuncionario: Boolean;
 
     { function and procedure declarations }
@@ -271,7 +270,7 @@ begin
           meTelefone.SetFocus;
         end;
 
-      if wTelefoneLimpo = '00000000000' then
+      if fRetirarMascaraTelefone(meTelefone.Text) = '00000000000' then
         begin
           Result:= False;
           ShowMessage('Preencha um Telefone v·lido com DDD!');
@@ -329,7 +328,6 @@ begin
   wValorTotalPv:= 0;
   wCodFolhaEmFoco:= 0;
   wCodigoFolha:= 0;
-  wTelefoneLimpo := '';
 
   //Adicionar o ano atual ao seAno
   DecodeDate(Date, wAnoAtual, wMesAtual, wDiaAtual);
@@ -846,30 +844,31 @@ end;
 procedure TfrFolhaPagamento.btSalvarClick(Sender: TObject);
 var
   wNovoCodigoFolha: Integer;
+  wS: String;
 begin
-  // Executa as valida√ß√µes dedicadas antes de salvar
   if not fValidaCamposFolha then
     Exit;
 
   // Garante que o c√°lculo final est√° feito e atualizado na tela
   btCalcularClick(nil);
 
-  // Gera o c√≥digo √∫nico ANTES de colocar o DataSet em modo de Insert
-  wNovoCodigoFolha := fGerarCodigoUnico;
-
-  // Desativa o AfterScroll temporariamente para n√£o disparar atualiza√ß√µes em lote na tela
+  // Desativa o AfterScroll temporariamente para n„o disparar nada enquanto cadastra
   cdsFolhaPagamento.AfterScroll := nil;
   
   try
-    // Procura se j√° existe uma folha cadastrada para esta compet√™ncia usando Locate (evita bugs de √≠ndice prim√°rio)
-    if cdsFolhaPagamento.Locate('bdCODFUNCIONARIO;bdMESCOMPETENCIA;bdANOCOMPETENCIA', VarArrayOf([wCodFuncionarioEmFoco, cbMes.Items[cbMes.ItemIndex], seAno.Value]), []) then
+     wNovoCodigoFolha := fGerarCodigoUnico;
+    // 1. Define o Ìndice ativo composto no ClientDataSet
+    cdsFolhaPagamento.IndexFieldNames := 'bdCODFUNCIONARIO;bdMESCOMPETENCIA;bdANOCOMPETENCIA';
+    // 2. Executa a busca bin·ria direta no Ìndice (usando Open Array nativo)
+
+    if cdsFolhaPagamento.FindKey([wCodFuncionarioEmFoco, cbMes.Items[cbMes.ItemIndex], seAno.Value]) then
       begin
         // Se j√° existir, edita a folha atual
         cdsFolhaPagamento.Edit;
       end
     else
       begin
-        // Se n√£o existir, insere uma nova folha
+        // Se n„o existir, insere uma nova folha
         cdsFolhaPagamento.Insert;
         
         // Atribui a chave usando a vari√°vel local pr√©-gerada
@@ -909,6 +908,19 @@ begin
     // Reativa o AfterScroll
     cdsFolhaPagamento.AfterScroll := cdsFolhaPagamentoAfterScroll;
   end;
+  //---------------------
+  {wS := '';
+  cdsFolhaPagamento.First;
+  
+  while not cdsFolhaPagamento.Eof do
+  begin
+    wS := wS + 'Func: ' + cdsFolhaPagamentobdCODFUNCIONARIO.AsString +
+         ' | CompetÍncia: ' + cdsFolhaPagamentobdMESCOMPETENCIA.AsString + '/' + cdsFolhaPagamentobdANOCOMPETENCIA.AsString + #13#10;
+    cdsFolhaPagamento.Next;
+  end;
+  
+  ShowMessage(wS);}
+  //------------------------
 end;
 
 function TfrFolhaPagamento.fValidaCamposFolha: Boolean;
@@ -981,7 +993,7 @@ procedure TfrFolhaPagamento.edSalarioBaseKeyPress(Sender: TObject;
   var Key: Char);
 begin
 
-  if not (Key in ['0'..'9', #8]) then
+  if not (Key in ['0'..'9',',', '.', #8]) then
     begin
       Key := #0;
     end;
@@ -1025,7 +1037,7 @@ begin
     begin
       wExiste := false;
 
-      for i := 0 to cbCargo.Items.Count do
+      for i := 0 to cbCargo.Items.Count - 1  do
         begin
 
           if LowerCase(cbCargo.Items[i]) = LowerCase(fNormalizarEspacos(cbCargo.Text)) then

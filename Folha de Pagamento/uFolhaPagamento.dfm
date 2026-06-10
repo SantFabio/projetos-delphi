@@ -1,6 +1,6 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 570
-  Top = 207
+  Left = 215
+  Top = 238
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
   ClientHeight = 583
