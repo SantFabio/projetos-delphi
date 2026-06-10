@@ -1,6 +1,6 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 215
-  Top = 238
+  Left = 398
+  Top = 199
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
   ClientHeight = 583
@@ -125,7 +125,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     TabOrder = 1
     object lbSalarioBase: TLabel
       Left = 16
-      Top = 26
+      Top = 18
       Width = 62
       Height = 21
       AutoSize = False
@@ -134,7 +134,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbHorasExtras: TLabel
       Left = 15
-      Top = 51
+      Top = 43
       Width = 63
       Height = 21
       AutoSize = False
@@ -143,7 +143,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbOutros: TLabel
       Left = 44
-      Top = 76
+      Top = 68
       Width = 34
       Height = 21
       AutoSize = False
@@ -152,7 +152,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object lbTotalProventos: TLabel
       Left = 51
-      Top = 101
+      Top = 93
       Width = 27
       Height = 21
       AutoSize = False
@@ -161,7 +161,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object edSalarioBase: TEdit
       Left = 88
-      Top = 26
+      Top = 18
       Width = 121
       Height = 21
       Enabled = False
@@ -173,7 +173,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object edHorasExtras: TEdit
       Left = 88
-      Top = 51
+      Top = 43
       Width = 121
       Height = 21
       Enabled = False
@@ -185,7 +185,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object edOutros: TEdit
       Left = 88
-      Top = 76
+      Top = 68
       Width = 121
       Height = 21
       Enabled = False
@@ -197,7 +197,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     end
     object edTotaisProventos: TEdit
       Left = 88
-      Top = 101
+      Top = 93
       Width = 121
       Height = 21
       Enabled = False
@@ -213,8 +213,8 @@ object frFolhaPagamento: TfrFolhaPagamento
     Caption = 'Descontos'
     TabOrder = 2
     object lbINSS: TLabel
-      Left = 64
-      Top = 26
+      Left = 96
+      Top = 18
       Width = 28
       Height = 21
       AutoSize = False
@@ -222,8 +222,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbIRRF: TLabel
-      Left = 64
-      Top = 51
+      Left = 96
+      Top = 43
       Width = 28
       Height = 21
       AutoSize = False
@@ -231,8 +231,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbValeTransp: TLabel
-      Left = 14
-      Top = 76
+      Left = 46
+      Top = 68
       Width = 78
       Height = 21
       AutoSize = False
@@ -240,8 +240,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object lbTotalDescontos: TLabel
-      Left = 65
-      Top = 101
+      Left = 97
+      Top = 93
       Width = 27
       Height = 21
       AutoSize = False
@@ -249,8 +249,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Layout = tlCenter
     end
     object edINSS: TEdit
-      Left = 105
-      Top = 26
+      Left = 137
+      Top = 18
       Width = 121
       Height = 21
       Enabled = False
@@ -258,8 +258,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edIRRF: TEdit
-      Left = 105
-      Top = 51
+      Left = 137
+      Top = 43
       Width = 121
       Height = 21
       Enabled = False
@@ -267,8 +267,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edValeTransp: TEdit
-      Left = 105
-      Top = 76
+      Left = 137
+      Top = 68
       Width = 121
       Height = 21
       Enabled = False
@@ -276,8 +276,8 @@ object frFolhaPagamento: TfrFolhaPagamento
       Text = '0,00'
     end
     object edTotaisDescontos: TEdit
-      Left = 105
-      Top = 101
+      Left = 137
+      Top = 93
       Width = 121
       Height = 21
       Enabled = False
@@ -632,7 +632,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       TabOrder = 3
     end
     object Panel2: TPanel
-      Left = 16
+      Left = 22
       Top = 176
       Width = 377
       Height = 25
@@ -657,7 +657,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         OnClick = btSalvarCadastroClick
       end
       object btLimparCamposFuncionarios: TBitBtn
-        Left = 191
+        Left = 190
         Top = 0
         Width = 89
         Height = 25
@@ -666,7 +666,7 @@ object frFolhaPagamento: TfrFolhaPagamento
         OnClick = btLimparCamposFuncionariosClick
       end
       object btExcluirFuncionario: TButton
-        Left = 288
+        Left = 285
         Top = 0
         Width = 89
         Height = 25

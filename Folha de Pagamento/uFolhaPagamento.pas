@@ -191,7 +191,6 @@ procedure TfrFolhaPagamento.btCadastrarClick(Sender: TObject);
 begin
   // Funï¿½ï¿½o: Habilita e trï¿½s o modal para fazer o cadastro do funcionï¿½rio
   pLimparCamposCadastroFuncionarios;
-  edCodFuncionario.Text := IntToStr(fGerarCodigoUnicoFuncionario);
   pnCadastroUsuario.Enabled := True;
   pnCadastroUsuario.Left := 60;
 end;
@@ -849,7 +848,7 @@ begin
   if not fValidaCamposFolha then
     Exit;
 
-  // Garante que o cÃ¡lculo final estÃ¡ feito e atualizado na tela
+  // Garante que o calculo final está feito e atualizado na tela
   btCalcularClick(nil);
 
   // Desativa o AfterScroll temporariamente para não disparar nada enquanto cadastra
@@ -863,7 +862,7 @@ begin
 
     if cdsFolhaPagamento.FindKey([wCodFuncionarioEmFoco, cbMes.Items[cbMes.ItemIndex], seAno.Value]) then
       begin
-        // Se jÃ¡ existir, edita a folha atual
+        // Se já existir, edita a folha atual
         cdsFolhaPagamento.Edit;
       end
     else
@@ -871,14 +870,14 @@ begin
         // Se não existir, insere uma nova folha
         cdsFolhaPagamento.Insert;
         
-        // Atribui a chave usando a variÃ¡vel local prÃ©-gerada
-        cdsFolhaPagamentobdCODFOLHA.AsInteger        := wNovoCodigoFolha; 
+        // Atribui a chave usando a variável local pre-gerada
+        cdsFolhaPagamentobdCODFOLHA.AsInteger        := wNovoCodigoFolha;
         cdsFolhaPagamentobdCODFUNCIONARIO.AsInteger  := wCodFuncionarioEmFoco;
         cdsFolhaPagamentobdMESCOMPETENCIA.AsString   := cbMes.Items[cbMes.ItemIndex];
         cdsFolhaPagamentobdANOCOMPETENCIA.AsInteger  := seAno.Value;
       end;
 
-    // Copia as informaÃ§Ãµes para a folha
+    // Copia as informações para a folha
     cdsFolhaPagamentobdNOMEFUNCIONARIO.AsString := cbNomeFuncionario.Items[cbNomeFuncionario.ItemIndex];
     cdsFolhaPagamentobdCARGO.AsString           := edCargoFuncionario.Text;
     
