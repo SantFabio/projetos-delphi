@@ -1,6 +1,6 @@
 object frFolhaPagamento: TfrFolhaPagamento
-  Left = 224
-  Top = 43
+  Left = 404
+  Top = 239
   BorderStyle = bsDialog
   Caption = 'Folha de Pagamento'
   ClientHeight = 584
@@ -292,7 +292,7 @@ object frFolhaPagamento: TfrFolhaPagamento
     Height = 81
     Caption = 'Resultado'
     TabOrder = 3
-    object Panel3: TPanel
+    object pnFormularioResultados: TPanel
       Left = 24
       Top = 24
       Width = 489
@@ -366,7 +366,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       end
     end
   end
-  object Panel1: TPanel
+  object pnBotoesFolha: TPanel
     Left = 85
     Top = 320
     Width = 436
@@ -427,7 +427,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Top = 0
       Width = 75
       Height = 25
-      Caption = 'Deleta'
+      Caption = 'Excluir'
       Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -646,7 +646,7 @@ object frFolhaPagamento: TfrFolhaPagamento
       Height = 21
       TabOrder = 3
     end
-    object Panel2: TPanel
+    object pnBotoesCadastroFunc: TPanel
       Left = 22
       Top = 176
       Width = 377

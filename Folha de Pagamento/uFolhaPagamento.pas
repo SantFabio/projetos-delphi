@@ -66,11 +66,11 @@ type
     cdsFuncionariosbdENDERECO: TStringField;
     cdsFuncionariosbdTELEFONE: TStringField;
     edTotaisProventos: TEdit;
-    Panel1: TPanel;
-    Panel2: TPanel;
+    pnBotoesFolha: TPanel;
+    pnBotoesCadastroFunc: TPanel;
     lbCompetencia: TLabel;
     cbMes: TComboBox;
-    Panel3: TPanel;
+    pnFormularioResultados: TPanel;
     cdsFolhaPagamento: TClientDataSet;
     dsFolha: TDataSource;
     cdsFolhaPagamentobdCODFOLHA: TIntegerField;
@@ -479,33 +479,56 @@ end;
 function TfrFolhaPagamento.fGerarCodigoUnico: Integer;
 var
   wMaxID: Integer;
+  wCdsClone: TClientDataSet;
 begin
   wMaxID := 0;
-  cdsFolhaPagamento.First;
+  wCdsClone := TClientDataSet.Create(nil);
 
-  while not cdsFolhaPagamento.Eof do
-    begin
-      if cdsFolhaPagamentobdCODFOLHA.AsInteger > wMaxID then
-        wMaxID := cdsFolhaPagamentobdCODFOLHA.AsInteger;
-        cdsFolhaPagamento.Next;
-    end;
+  try
+    wCdsClone.CloneCursor(cdsFolhaPagamento, True);
 
+    wCdsClone.First;
+
+    while not wCdsClone.Eof do
+      begin
+
+        if wCdsClone.Fields[cdsFolhaPagamentobdCODFOLHA.Index].AsInteger > wMaxID then
+           wMaxID := wCdsClone.Fields[cdsFolhaPagamentobdCODFOLHA.Index].AsInteger;
+
+          wCdsClone.Next;
+      end;
+  finally
+    wCdsClone.Free;
+  end;
   Result := wMaxID + 1;
 end;
 
 function TfrFolhaPagamento.fGerarCodigoUnicoFuncionario: Integer;
 var
   wMaxID: Integer;
+  wCdsClone: TClientDataSet;
 begin
   wMaxID := 0;
-  cdsFuncionarios.First;
+  wCdsClone := TClientDataSet.Create(nil);
 
-  while not cdsFuncionarios.Eof do
-    begin
-      if cdsFuncionariosbdCODFUNCIONARIO.AsInteger > wMaxID then
-        wMaxID := cdsFuncionariosbdCODFUNCIONARIO.AsInteger;
-        cdsFuncionarios.Next;
-    end;
+  try
+    // Sobre o True: Crie o clone, mas 'resete' (zere) as configurações de navegação dele
+    wCdsClone.CloneCursor(cdsFuncionarios, True);
+    wCdsClone.First;
+
+    while not wCdsClone.Eof do
+      begin
+
+        if wCdsClone.Fields[cdsFuncionariosbdCODFUNCIONARIO.Index].AsInteger > wMaxID then
+           wMaxID := wCdsClone.Fields[cdsFuncionariosbdCODFUNCIONARIO.Index].AsInteger;
+
+        wCdsClone.Next;
+      end;
+  finally
+
+    wCdsClone.Free;
+
+  end;
 
   Result := wMaxID + 1;
 end;
@@ -513,7 +536,7 @@ end;
 procedure TfrFolhaPagamento.btLimparClick(Sender: TObject);
 begin
   {
-    Funï¿½ï¿½o: Botï¿½oo de limpar campos.
+    Função: Botão de limpar campos.
   }
   // Limpa os campos
   cbNomeFuncionario.ItemIndex := -1;
@@ -523,7 +546,7 @@ end;
 procedure TfrFolhaPagamento.pLimparCampos;
 begin
   {
-    Funï¿½ï¿½o: Limpa os campos de calculo de folha;
+    Função: Limpa os campos de calculo de folha;
   }
   edCargoFuncionario.Text:= '';
   edSalarioBase.Text := FormatCurr('#,##0.00', 0);
@@ -719,29 +742,40 @@ begin
       Exit;
     end;
 
-
-  cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
-
   cdsFuncionarios.AfterScroll := nil;
 
-  if cdsFuncionarios.FindKey([edCodFuncionario.Text]) then
-    begin
-      cdsFuncionarios.Edit;
-      cdsFuncionariosbdCODFUNCIONARIO.AsInteger := cdsFuncionariosbdCODFUNCIONARIO.AsInteger;
-    end
-  else
-    begin
-      cdsFuncionarios.Insert;
-      cdsFuncionariosbdCODFUNCIONARIO.AsInteger := StrToInt(edCodFuncionario.Text);
-    end;
+  try
+    cdsFuncionarios.IndexFieldNames := 'bdCODFUNCIONARIO';
 
-  cdsFuncionariosbdNOME.AsString     := fNormalizarEspacos(edNomeCadastro.Text);
-  cdsFuncionariosbdCARGO.AsString    := cbCargo.Items[cbCargo.ItemIndex];
-  cdsFuncionariosbdENDERECO.AsString := fNormalizarEspacos(edEndereco.Text);
-  cdsFuncionariosbdTELEFONE.AsString := fRetirarMascaraTelefone(meTelefone.Text);
-  cdsFuncionarios.Post;
+    if cdsFuncionarios.FindKey([edCodFuncionario.Text]) then
+      begin
 
-  cdsFuncionarios.AfterScroll := cdsFuncionariosAfterScroll;
+        // Pergunta ao usuário se ele realmente deseja sobrescrever os dados do funcionário
+        if MessageDlg('Já existe este funcionário no período selecionado.' + sLineBreak +
+                      'Deseja realmente alterar/sobrescrever os dados?',
+                      mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+          begin
+            Exit;
+          end;
+
+        cdsFuncionarios.Edit;
+        cdsFuncionariosbdCODFUNCIONARIO.AsInteger := cdsFuncionariosbdCODFUNCIONARIO.AsInteger;
+      end
+    else
+      begin
+        cdsFuncionarios.Insert;
+        cdsFuncionariosbdCODFUNCIONARIO.AsInteger := StrToInt(edCodFuncionario.Text);
+      end;
+
+    cdsFuncionariosbdNOME.AsString     := fNormalizarEspacos(edNomeCadastro.Text);
+    cdsFuncionariosbdCARGO.AsString    := cbCargo.Items[cbCargo.ItemIndex];
+    cdsFuncionariosbdENDERECO.AsString := fNormalizarEspacos(edEndereco.Text);
+    cdsFuncionariosbdTELEFONE.AsString := fRetirarMascaraTelefone(meTelefone.Text);
+    cdsFuncionarios.Post;
+
+  finally
+    cdsFuncionarios.AfterScroll := cdsFuncionariosAfterScroll;
+  end;
 
   pLimparCamposCadastroFuncionarios;
 end;
@@ -858,13 +892,19 @@ begin
   cdsFolhaPagamento.AfterScroll := nil;
   
   try
-     wNovoCodigoFolha := fGerarCodigoUnico;
-    // 1. Define o índice ativo composto no ClientDataSet
+    wNovoCodigoFolha := fGerarCodigoUnico;
     cdsFolhaPagamento.IndexFieldNames := 'bdCODFUNCIONARIO;bdMESCOMPETENCIA;bdANOCOMPETENCIA';
-    // 2. Executa a busca binária direta no índice (usando Open Array nativo)
 
     if cdsFolhaPagamento.FindKey([wCodFuncionarioEmFoco, cbMes.Items[cbMes.ItemIndex], seAno.Value]) then
       begin
+        // Pergunta ao usuário se ele realmente deseja sobrescrever os dados
+        if MessageDlg('Já existe uma folha de pagamento lançada para este funcionário no período selecionado.' + sLineBreak +
+                      'Deseja realmente alterar/sobrescrever os dados existentes?',
+                      mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+          begin
+            Exit; // Cancela a gravação e sai com segurança (o finally será executado)
+          end;
+
         // Se já existir, edita a folha atual
         cdsFolhaPagamento.Edit;
       end
@@ -1027,7 +1067,7 @@ end;
 
 procedure TfrFolhaPagamento.btNovoCargoClick(Sender: TObject);
 var
-  i: Integer;
+  wI: Integer;
   wExiste: Boolean;
 begin
 
@@ -1039,10 +1079,10 @@ begin
     begin
       wExiste := false;
 
-      for i := 0 to cbCargo.Items.Count - 1  do
+      for wI := 0 to cbCargo.Items.Count - 1  do
         begin
 
-          if LowerCase(cbCargo.Items[i]) = LowerCase(fNormalizarEspacos(cbCargo.Text)) then
+          if LowerCase(cbCargo.Items[wI]) = LowerCase(fNormalizarEspacos(cbCargo.Text)) then
             begin
              wExiste := true;
             end;
@@ -1083,27 +1123,39 @@ end;
 procedure TfrFolhaPagamento.btConsultarClick(Sender: TObject);
 var
   wCdsClone: TClientDataSet;
-  wMessagem: String;
+  wRelatorio: String;
 begin
+  wCdsClone := TClientDataSet.Create(nil);
 
-  if cdsFolhaPagamento.IsEmpty then
-     Exit;
+  try
+    wCdsClone.CloneCursor(cdsFolhaPagamento, True);
 
-  Try
-    wCdsClone.CloneCursor(cdsFolhaPagamento, True, False);
+    wRelatorio := 'RELATÓRIO DE FOLHA DE PAGAMENTO' + sLineBreak;
+    wRelatorio := wRelatorio + '--------------------------------' + sLineBreak + sLineBreak;
+
     wCdsClone.First;
 
-    while wCdsClone.Eof do
+    while not wCdsClone.Eof do
       begin
-        wMessagem := wMessagem + wCdsClone + sLineBreak;
+        wRelatorio := wRelatorio +
+                      'Funcionário: ' + wCdsClone.Fields[cdsFolhaPagamentobdNOMEFUNCIONARIO.Index].AsString + sLineBreak +
+                      'Cargo: ' + wCdsClone.Fields[cdsFolhaPagamentobdCARGO.Index].AsString + sLineBreak +
+                      'Competência: ' + wCdsClone.Fields[cdsFolhaPagamentobdMESCOMPETENCIA.Index].AsString + '/' +
+                                       IntToStr(wCdsClone.Fields[cdsFolhaPagamentobdANOCOMPETENCIA.Index].AsInteger) + sLineBreak +
+                      'Salário Base: R$ ' + FormatCurr('#,##0.00', wCdsClone.Fields[cdsFolhaPagamentobdSALARIOBASE.Index].AsCurrency) + sLineBreak +
+                      'Total Proventos: R$ ' + FormatCurr('#,##0.00', wCdsClone.Fields[cdsFolhaPagamentobdTOTALPROVENTOS.Index].AsCurrency) + sLineBreak +
+                      'Total Descontos: R$ ' + FormatCurr('#,##0.00', wCdsClone.Fields[cdsFolhaPagamentobdTOTALDESCONTOS.Index].AsCurrency) + sLineBreak +
+                      'Salário Líquido: R$ ' + FormatCurr('#,##0.00', wCdsClone.Fields[cdsFolhaPagamentobdSALARIOLIQUIDO.Index].AsCurrency) + sLineBreak +
+                      '--------------------------------' + sLineBreak;
         wCdsClone.Next;
       end;
 
-    ShowMessage(wMessagem);
-
+    ShowMessage(wRelatorio);
   finally
-     wCdsClone.Close;
-
+  //Close > fecha/desativa o dataset
+  //Free  > destrói o objeto da memória
+    wCdsClone.Free;
+  end;
 end;
 
 end.
